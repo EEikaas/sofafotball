@@ -94,6 +94,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 .kb b{position:relative;pointer-events:none}
 .kb .lading{position:absolute;left:0;right:0;bottom:0;height:var(--c,0%);background:rgba(255,90,40,.8);pointer-events:none}
 .kb.ned{transform:translateY(3px) scale(.97)}
+.kb-takle.av{opacity:.3}
 .kb-spark{right:0;bottom:0;width:var(--s);height:var(--s);font-size:calc(var(--s)*.21)}
 .kb-lobb{right:calc(var(--s)*1.1);bottom:0;width:calc(var(--s)*.72);height:calc(var(--s)*.72);font-size:calc(var(--s)*.17)}
 .kb-takle{right:0;bottom:calc(var(--s)*1.1);width:calc(var(--s)*.72);height:calc(var(--s)*.72);font-size:calc(var(--s)*.17)}
@@ -139,7 +140,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
       <button class="knapp k-ai" data-go="duell">To mobiler <small>hver sin skjerm, uten TV</small></button>
       <button class="knapp k-ai" data-go="bane" data-ai="1">1 spiller <small>mot datamaskinen, på denne mobilen</small></button>
     </div>
-    <p class="hjelp">Hold inne SPARK eller LOBB for mer kraft, og slipp for å sparke. LOBB sender ballen gjennom lufta over motspilleren. TAKLE er en glidetakling: treffer du ballen først, er den ren, men tar du mannen i eget felt, blir det straffe. Går ballen ut, blir det innkast, corner eller utspark. Sikt med styrespaken og spark.</p>
+    <p class="hjelp">Hold inne SPARK eller LOBB for mer kraft, og slipp for å sparke. LOBB sender ballen gjennom lufta over motspilleren. Ballen klistrer seg til foten når du får den, så du kan drible. Uten ball kan du TAKLE: treffer du ballen først, er taklingen ren, men tar du mannen i eget felt, blir det straffe. Går ballen ut, blir det innkast, corner eller utspark. Sikt med styrespaken og spark.</p>
   </div>
 </section>
 
@@ -318,15 +319,15 @@ const tilkoblinger = new Map();                    // conn -> siste kontrollerda
 const kb = [nyKtl(), nyKtl()], kbStart = [0, 0];
 const keys = new Set();
 const sistHendelse = {};
-const aiState = [{ stuck: 0 }, { stuck: 0 }];
+const aiState = [{ hold: 0 }, { hold: 0 }];
 let gjeldende = ['', ''];
 let aiPa = false;
 
 function nySpiller(x, dx){
-  return { x, y: H / 2, vx: 0, vy: 0, dx, dy: 0, cd: 0, fx: 0, c: 0, stun: 0, lunge: 0, tcd: 0, ldx: 0, ldy: 0, lball: false, lhit: false };
+  return { x, y: H / 2, vx: 0, vy: 0, dx, dy: 0, cd: 0, fx: 0, fangCd: 0, c: 0, stun: 0, lunge: 0, tcd: 0, ldx: 0, ldy: 0, lball: false, lhit: false };
 }
 function nyKamp(){
-  game = { score: [0, 0], tid: KAMPTID, tilstand: 'klar', pause: 0, sist: -1, fast: null, meldT: 0,
+  game = { score: [0, 0], tid: KAMPTID, tilstand: 'klar', pause: 0, sist: -1, fast: null, meldT: 0, eier: -1,
     ball: { x: W / 2, y: H / 2, z: 0, vx: 0, vy: 0, vz: 0 },
     pl: [nySpiller(W * 0.25, 1), nySpiller(W * 0.75, -1)] };
   melding('Klar?', modus === 'solo' ? 'Styr med venstre tommel, trykk SPARK for å starte' : 'Spark for å starte');
@@ -337,7 +338,7 @@ function plasser(){
   Object.assign(g.ball, { x: W / 2, y: H / 2, z: 0, vx: 0, vy: 0, vz: 0 });
   Object.assign(g.pl[0], nySpiller(W * 0.25, 1));
   Object.assign(g.pl[1], nySpiller(W * 0.75, -1));
-  g.sist = -1;
+  g.sist = -1; g.eier = -1;
 }
 function melding(t, p){ gjeldende = [t || '', p || '']; $('#m-tittel').textContent = gjeldende[0]; $('#m-tekst').textContent = gjeldende[1]; }
 function kortMelding(tekst, sek){ melding('', tekst); game.meldT = sek; }
@@ -346,7 +347,7 @@ function tavle(){
   $('#s0').textContent = game.score[0];
   $('#s1').textContent = game.score[1];
   visKlokke(game.tid);
-  const msg = { role: 'bane', score: game.score, tilstand: game.tilstand };
+  const msg = { role: 'bane', score: game.score, tilstand: game.tilstand, eier: game.eier };
   for (const conn of tilkoblinger.keys()) { try { if (conn.open) conn.send(msg); } catch (e) {} }
 }
 const iBoks = (x, y, eier) => Math.abs(y - H / 2) < BOKS_H / 2 && (eier === 0 ? x < BOKS_D : x > W - BOKS_D);
@@ -433,7 +434,7 @@ function lagSnap(){
   return { b: [r(g.ball.x), r(g.ball.y), r(g.ball.z)],
     p: g.pl.map(p => [r(p.x), r(p.y), +p.dx.toFixed(2), +p.dy.toFixed(2), +p.fx.toFixed(2), +p.c.toFixed(2), p.stun > 0 ? 1 : 0, p.lunge > 0 ? 1 : 0]),
     fa: f ? [r(f.bx), r(f.by), +f.ax.toFixed(2), +f.ay.toFixed(2)] : 0,
-    t: Math.ceil(g.tid), m: gjeldende };
+    t: Math.ceil(g.tid), m: gjeldende, e: g.eier };
 }
 function brukSnap(d){
   const g = game, s = d.snap;
@@ -442,7 +443,7 @@ function brukSnap(d){
   s.p.forEach((q, i) => { if (g.pl[i] && Array.isArray(q)) Object.assign(g.pl[i], { x: +q[0], y: +q[1], dx: +q[2], dy: +q[3], fx: +q[4], c: +q[5] || 0, stun: q[6] ? 1 : 0, lunge: q[7] ? 1 : 0, ldx: +q[2], ldy: +q[3] }); });
   g.fast = Array.isArray(s.fa) ? { bx: +s.fa[0], by: +s.fa[1], ax: +s.fa[2], ay: +s.fa[3] } : null;
   if (Array.isArray(d.score)) g.score = d.score.map(n => +n || 0);
-  g.tid = +s.t || 0; g.tilstand = d.tilstand;
+  g.tid = +s.t || 0; g.tilstand = d.tilstand; g.eier = Number.isInteger(s.e) ? s.e : -1;
   if (Array.isArray(s.m) && (s.m[0] !== gjeldende[0] || s.m[1] !== gjeldende[1])) melding(String(s.m[0]), String(s.m[1]));
   $('#s0').textContent = g.score[0]; $('#s1').textContent = g.score[1];
   visKlokke(g.tid);
@@ -553,46 +554,41 @@ function aiInput(i){
   }
   if (g.tilstand !== 'spill' || p.stun > 0) return r;
 
-  // Hvor vil vi sende ballen? Mot mål, men nær kanten blandes det inn retning mot midten
-  let mx = malX - b.x, my = H / 2 - b.y; let ml = Math.hypot(mx, my) || 1; mx /= ml; my /= ml;
-  const kant = Math.min(b.x, W - b.x, b.y, H - b.y);
-  if (kant < 70 || a.stuck > 1) {
-    let cx = W / 2 - b.x, cy = H / 2 - b.y; const cl = Math.hypot(cx, cy) || 1; cx /= cl; cy /= cl;
-    const w = a.stuck > 1 ? 1 : 0.65;
-    mx = mx * (1 - w) + cx * w; my = my * (1 - w) + cy * w; ml = Math.hypot(mx, my) || 1; mx /= ml; my /= ml;
+  const qd = Math.hypot(q.x - p.x, q.y - p.y);
+  if (g.eier === i) {
+    // Drible mot mål og sving unna motspilleren
+    let tx = malX, ty = H / 2 + clamp((p.y - H / 2) * 0.3, -60, 60);
+    if (qd < 130 && ((q.x - p.x) * dir) > -20) {
+      const ax = tx - p.x, ay = ty - p.y, al = Math.hypot(ax, ay) || 1, ux = ax / al, uy = ay / al;
+      const side = ((q.x - p.x) * -uy + (q.y - p.y) * ux) > 0 ? -1 : 1;
+      tx = p.x + ux * 100 + -uy * side * 90; ty = p.y + uy * 100 + ux * side * 90;
+    }
+    ty = clamp(ty, 50, H - 50);
+    gåMot(tx, ty, 0.9);
+    a.hold += 1 / 60;
+    const malAvst = Math.hypot(malX - p.x, H / 2 - p.y);
+    const motMal = ((malX - p.x) * p.dx + (H / 2 - p.y) * p.dy) / malAvst;
+    const qForan = qd < 75 && ((q.x - p.x) * p.dx + (q.y - p.y) * p.dy) > 0;
+    if (p.cd <= 0) {
+      if (malAvst < 400 && motMal > 0.85 && Math.random() < 0.05) r.kick = { p: 0.75 + Math.random() * 0.25, t: 's' };
+      else if (qForan && motMal > 0.3 && Math.random() < 0.03) r.kick = { p: 0.45 + Math.random() * 0.3, t: 'l' };
+      else if (a.hold > 7 && motMal > 0.2 && Math.random() < 0.02) r.kick = { p: 0.6, t: 's' };
+    }
+    return r;
   }
-  const bx = b.x - p.x, by = b.y - p.y, bd = Math.hypot(bx, by) || 1;
-  const foran = (p.x - b.x) * mx + (p.y - b.y) * my;    // > 0: vi står på feil side av ballen
-  let tx, ty;
-  if (b.z > HODE) {                                      // ballen er i lufta: løp mot landingspunktet
+  a.hold = 0;
+  // Løs ball eller motspilleren har den: løp til ballen (eller dit den lander)
+  let tx = b.x, ty = b.y;
+  if (b.z > HODE) {
     const tl = (b.vz + Math.sqrt(b.vz * b.vz + 2 * G * b.z)) / G;
     tx = b.x + b.vx * tl * 0.8; ty = b.y + b.vy * tl * 0.8;
-  } else if (foran > -6 && bd < 150) {                   // gå rundt ballen på siden
-    const sx = -my, sy = mx, side = ((p.x - b.x) * sx + (p.y - b.y) * sy) >= 0 ? 1 : -1;
-    tx = b.x - mx * (PR + BR + 22) + sx * side * (PR + BR + 20);
-    ty = b.y - my * (PR + BR + 22) + sy * side * (PR + BR + 20);
-  } else {
-    tx = b.x - mx * (PR + BR - 4); ty = b.y - my * (PR + BR - 4);
+  } else if (g.eier < 0) {
+    tx = b.x + b.vx * 0.15; ty = b.y + b.vy * 0.15;
   }
-  gåMot(tx, ty, 0.86);
-
-  // Låst-detektor: står vi inntil ballen uten at noe skjer, sikt mot midten og spark
-  if (bd < PR + BR + 16 && Math.hypot(b.vx, b.vy) < 70) a.stuck += 1 / 60; else a.stuck = Math.max(0, a.stuck - 1 / 30);
-  if (a.stuck > 2.5) a.stuck = 0;
-
-  const sikter = (bx / bd * mx + by / bd * my) > 0.78;
-  if (p.cd <= 0 && bd < PR + BR + 18 && b.z < HODE && (sikter || a.stuck > 1.6) && Math.random() < 0.09) {
-    const malAvst = Math.hypot(malX - b.x, H / 2 - b.y);
-    const blokk = Math.hypot(q.x - b.x, q.y - b.y) < 170 && ((q.x - b.x) * mx + (q.y - b.y) * my) > 20;
-    if (a.stuck > 1) r.kick = { p: 0.55, t: 's' };
-    else if (malAvst < 380) r.kick = { p: 0.7 + Math.random() * 0.3, t: 's' };
-    else if (blokk && Math.random() < 0.5) r.kick = { p: 0.45 + Math.random() * 0.3, t: 'l' };
-    else r.kick = { p: 0.28 + Math.random() * 0.2, t: 's' };
-  }
+  gåMot(tx, ty, 0.88);
   // Takling når motspilleren har ballen
-  const qBall = Math.hypot(q.x - b.x, q.y - b.y) < PR + BR + 25;
-  const qd = Math.hypot(q.x - p.x, q.y - p.y);
-  if (qBall && qd < 85 && p.tcd <= 0 && q.stun <= 0 && (bx / bd * p.dx + by / bd * p.dy) > 0.75) {
+  const bx = b.x - p.x, by = b.y - p.y, bd = Math.hypot(bx, by) || 1;
+  if (g.eier === 1 - i && qd < 85 && p.tcd <= 0 && q.stun <= 0 && (bx / bd * p.dx + by / bd * p.dy) > 0.75) {
     if (Math.random() < (iBoks(q.x, q.y, i) ? 0.006 : 0.035)) r.tackle = true;
   }
   return r;
@@ -610,6 +606,7 @@ function spark(i, kick, retning){
     if (d > PR + BR + 22 || b.z > HODE) return false;
     nx = d > 0 ? dx / d : p.dx; ny = d > 0 ? dy / d : p.dy;
   }
+  if (g.eier >= 0) { g.pl[g.eier].fangCd = g.eier === i ? 0.3 : 0.5; g.eier = -1; tavle(); }
   const pw = kick.p;
   if (kick.t === 'l') { const v = 190 + 400 * pw; b.vx = nx * v; b.vy = ny * v; b.vz = 240 + 330 * pw; b.z = Math.max(b.z, 1); }
   else { const v = 260 + 760 * pw; b.vx = nx * v + (retning ? 0 : p.vx * 0.25); b.vy = ny * v + (retning ? 0 : p.vy * 0.25); }
@@ -623,7 +620,7 @@ function startFast(type, lag, bx, by){
   if (type === 'corner') { ax = (lag === 0 ? W - 90 : 90) - bx; ay = H / 2 - by; }
   const l = Math.hypot(ax, ay); ax /= l; ay /= l;
   g.fast = { type, lag, bx, by, ax, ay, t: 0, mx: lag === 0 ? W - PR : PR };
-  g.tilstand = 'fast';
+  g.tilstand = 'fast'; g.eier = -1;
   Object.assign(g.ball, { x: bx, y: by, z: 0, vx: 0, vy: 0, vz: 0 });
   g.pl.forEach(p => { p.lunge = 0; p.stun = 0; p.vx = p.vy = 0; });
   if (type === 'straffe') { const k = g.pl[1 - lag]; k.x = g.fast.mx; k.y = H / 2; }
@@ -669,16 +666,17 @@ function steg(dt, inn){
   g.pl.forEach((p, i) => {
     const s = inn[i], styr = spill || fast;
     p.cd = Math.max(0, p.cd - dt); p.fx = Math.max(0, p.fx - dt);
-    p.stun = Math.max(0, p.stun - dt); p.tcd = Math.max(0, p.tcd - dt);
+    p.stun = Math.max(0, p.stun - dt); p.tcd = Math.max(0, p.tcd - dt); p.fangCd = Math.max(0, p.fangCd - dt);
     p.c = styr ? s.c : 0;
     if (p.lunge > 0) { p.lunge -= dt; p.vx = p.ldx * 640; p.vy = p.ldy * 640; }
     else if (!styr || p.stun > 0) { const f = Math.pow(0.02, dt); p.vx *= f; p.vy *= f; }
     else {
       const r = Math.min(1, dt * 12);
-      p.vx += (s.x * SPD - p.vx) * r; p.vy += (s.y * SPD - p.vy) * r;
+      const fart = g.eier === i ? SPD * 0.9 : SPD;
+      p.vx += (s.x * fart - p.vx) * r; p.vy += (s.y * fart - p.vy) * r;
       const l = Math.hypot(s.x, s.y); if (l > 0.2) { p.dx = s.x / l; p.dy = s.y / l; }
     }
-    if (spill && s.tackle && p.tcd <= 0 && p.stun <= 0 && p.lunge <= 0) {
+    if (spill && s.tackle && g.eier !== i && p.tcd <= 0 && p.stun <= 0 && p.lunge <= 0) {
       p.lunge = 0.26; p.tcd = 1.2; p.ldx = p.dx; p.ldy = p.dy; p.lball = false; p.lhit = false;
     }
     p.x = clamp(p.x + p.vx * dt, -40, W + 40);
@@ -715,11 +713,13 @@ function steg(dt, inn){
     if (p.lunge <= 0) return;
     const q = g.pl[1 - i];
     if (!p.lball && b.z < HODE && Math.hypot(b.x - p.x, b.y - p.y) < PR + BR + 8) {
-      b.vx = p.ldx * 460; b.vy = p.ldy * 460; p.lball = true; g.sist = i;
+      if (g.eier >= 0 && g.eier !== i) { g.pl[g.eier].fangCd = 0.6; g.eier = -1; tavle(); }
+      if (g.eier !== i) { b.vx = p.ldx * 460; b.vy = p.ldy * 460; b.z = 0; b.vz = 0; }
+      p.lball = true; g.sist = i;
     }
     if (!p.lhit && q.stun <= 0 && Math.hypot(q.x - p.x, q.y - p.y) < PR * 2 + 4) {
       p.lhit = true;
-      const qBall = Math.hypot(q.x - b.x, q.y - b.y) < PR + BR + 30;
+      const qBall = g.eier === 1 - i || Math.hypot(q.x - b.x, q.y - b.y) < PR + BR + 30;
       if (p.lball) { q.stun = 0.7; kortMelding('Ren takling av ' + NAVN[i], 1.2); }
       else if (qBall) {
         if (iBoks(q.x, q.y, i)) { startFast('straffe', 1 - i, i === 0 ? STRAFFE : W - STRAFFE, H / 2); return; }
@@ -736,7 +736,21 @@ function steg(dt, inn){
     if (d < PR * 2 && d > 0) { const o = (PR * 2 - d) / 2, nx = dx / d, ny = dy / d; p.x -= nx * o; p.y -= ny * o; q.x += nx * o; q.y += ny * o; }
   }
 
-  // Ball
+  // Ball ved foten (dribling)
+  if (spill && g.eier >= 0 && (g.pl[g.eier].stun > 0 || g.pl[g.eier].lunge > 0)) { g.pl[g.eier].fangCd = 0.4; g.eier = -1; tavle(); }
+  const holdt = spill && g.eier >= 0;
+  if (holdt) {
+    const p = g.pl[g.eier], q = g.pl[1 - g.eier], avst = PR + BR + 1, r = Math.min(1, dt * 20);
+    b.x += (p.x + p.dx * avst - b.x) * r; b.y += (p.y + p.dy * avst - b.y) * r;
+    b.z = 0; b.vz = 0; b.vx = p.vx; b.vy = p.vy;
+    // Motspilleren når ballen forfra: ballen spretter løs
+    if (q.stun <= 0 && Math.hypot(b.x - q.x, b.y - q.y) < PR + BR + 2) {
+      const h = g.eier, dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy) || 1;
+      g.eier = -1; p.fangCd = 0.5; q.fangCd = 0.12; g.sist = 1 - h;
+      b.vx = dx / d * 180 + q.vx * 0.3; b.vy = dy / d * 180 + q.vy * 0.3;
+      tavle();
+    }
+  } else {
   b.x += b.vx * dt; b.y += b.vy * dt;
   if (b.z > 0 || b.vz > 0) {
     b.vz -= G * dt; b.z += b.vz * dt;
@@ -755,6 +769,21 @@ function steg(dt, inn){
       g.sist = i;
     }
   });
+  // Fang ballen: den nærmeste spilleren som kan, får den på foten
+  if (spill && g.eier < 0 && b.z < HODE * 0.6) {
+    let best = -1, bestD = 1e9;
+    g.pl.forEach((p, i) => {
+      if (p.stun > 0 || p.lunge > 0 || p.fangCd > 0) return;
+      const d = Math.hypot(b.x - p.x, b.y - p.y), rel = Math.hypot(b.vx - p.vx, b.vy - p.vy);
+      if (d < PR + BR + 6 && rel < 430 && d < bestD) { bestD = d; best = i; }
+    });
+    if (best >= 0) {
+      const p = g.pl[best], dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy) || 1;
+      g.eier = best; g.sist = best;
+      if (Math.hypot(p.vx, p.vy) < 60) { p.dx = dx / d; p.dy = dy / d; }
+      tavle();
+    }
+  }
   // Stolper
   if (b.z < BAR) for (const [px, py] of [[0, GT], [0, GB], [W, GT], [W, GB]]) {
     const dx = b.x - px, dy = b.y - py, d = Math.hypot(dx, dy), min = BR + 5;
@@ -763,13 +792,14 @@ function steg(dt, inn){
       const v = b.vx * nx + b.vy * ny; if (v < 0) { b.vx -= 1.7 * v * nx; b.vy -= 1.7 * v * ny; }
     }
   }
+  }
   // Mål og ut av banen
   if (spill) {
     if (b.x < -BR || b.x > W + BR) {
       const d = b.x < 0 ? 0 : 1;                       // laget som forsvarer denne enden
       if (b.y > GT && b.y < GB && b.z < BAR) {
         const lag = 1 - d;
-        g.score[lag]++; g.tilstand = 'mal'; g.pause = 2.2;
+        g.score[lag]++; g.tilstand = 'mal'; g.pause = 2.2; g.eier = -1;
         melding('MÅL!', NAVN[lag] + ' scorer · ' + g.score[0] + '–' + g.score[1]);
         tavle(); vib(60);
       } else if (g.sist === d) {
@@ -877,7 +907,7 @@ function tegn(){
 let sistStatus = '';
 function loop(t){
   const dt = Math.min(0.033, (t - sist) / 1000 || 0.016); sist = t;
-  if (modus === 'gjest' || modus === 'stopp') { if (modus === 'gjest') tegn(); requestAnimationFrame(loop); return; }
+  if (modus === 'gjest' || modus === 'stopp') { if (modus === 'gjest') { tegn(); oppdaterTakle(1); } requestAnimationFrame(loop); return; }
   const inn = samleInput();
   const st = (fjernKilder(0).length ? 1 : 0) + '' + (fjernKilder(1).length ? 1 : 0);
   if (st !== sistStatus) { sistStatus = st; $('#p-gul').classList.toggle('on', st[0] === '1'); $('#p-bla').classList.toggle('on', st[1] === '1'); }
@@ -886,6 +916,7 @@ function loop(t){
     steg(dt / n, inn);
     inn.forEach(s => { s.kick = null; s.tackle = false; });   // hendelser brukes bare én gang
   }
+  oppdaterTakle(0);
   if (modus === 'vert' && t - sisteSnap > 33) {
     sisteSnap = t;
     const msg = { role: 'bane', score: game.score, tilstand: game.tilstand, snap: lagSnap() };
@@ -895,6 +926,11 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 
+let takleAv = null;
+function oppdaterTakle(lag){
+  const av = game && game.eier === lag;
+  if (av !== takleAv) { takleAv = av; $('#touch .kb-takle').classList.toggle('av', av); }
+}
 /* ---------- berøringsstyring på banen ---------- */
 const touchKtl = lagKontroller($('#touch'), () => { if (modus === 'gjest') sendGjest(); });
 setInterval(() => { if (modus === 'gjest') sendGjest(); }, 250);
@@ -1010,6 +1046,7 @@ function byggPad(el, rolle){
       if (padBane) {
         const s = Array.isArray(padBane.score) ? padBane.score : [0, 0];
         score.textContent = (+s[0] || 0) + ' – ' + (+s[1] || 0);
+        $('.kb-takle', el).classList.toggle('av', padBane.eier === LAG.indexOf(rolle));
         const t = padBane.tilstand;
         status.textContent = 'Kode ' + padKode + ' · ' + (t === 'klar' || t === 'slutt' ? 'Trykk SPARK for å starte' : 'Tilkoblet');
       } else status.textContent = 'Kode ' + padKode + ' · venter på banen …';
