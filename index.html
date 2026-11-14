@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sofafotball</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sofafotball">
+<meta name="theme-color" content="#173d22">
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700;800&display=swap">
 <style>
@@ -47,6 +52,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 .t-spark{position:absolute;right:calc(20px + env(safe-area-inset-right,0px));bottom:24px;width:112px;height:112px;border-radius:50%;pointer-events:auto;touch-action:none;background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.8);color:#fff;font-size:22px;font-weight:800}
 .t-spark.ned{background:rgba(255,255,255,.5)}
 .touch-modus .info{top:10px;bottom:auto}
+.solo .info{display:none}
+.tips{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(90vw,420px);background:#fff;color:#12241a;border-radius:14px;padding:18px 20px;font-size:19px;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;z-index:5}
+.tips.on{display:block}
+.tips button{margin-top:12px;background:#12241a;color:#fff;padding:8px 18px;border-radius:10px;font-size:18px;font-weight:700}
 .touch-modus .info > span:not(:first-child){display:none}
 .touch-modus .t-spark{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .touch-modus .bane-knapper{top:10px;bottom:auto}
@@ -116,7 +125,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
         <button class="knapp k-bla" data-go="bla">Blå <small>kontroller</small></button>
       </div>
       <button class="knapp k-ai" data-go="duell">To mobiler <small>hver sin skjerm, uten TV</small></button>
-      <button class="knapp k-ai" data-go="bane" data-ai="1">1 spiller <small>mot datamaskinen</small></button>
+      <button class="knapp k-ai" data-go="bane" data-ai="1">1 spiller <small>mot datamaskinen, på denne mobilen</small></button>
     </div>
   </div>
 </section>
@@ -140,7 +149,12 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
     <button class="t-spark">SPARK</button>
     <div class="snu">Snu mobilen på tvers for å spille</div>
   </div>
+  <div class="tips" id="tips">
+    Denne nettleseren støtter ikke fullskjerm direkte. På iPhone: trykk Del-knappen og velg «Legg til på Hjem-skjerm». Åpner du spillet fra ikonet der, fyller det hele skjermen.
+    <br><button id="tips-lukk">OK</button>
+  </div>
   <div class="bane-knapper">
+    <button class="tilbake" id="fullskjerm">Fullskjerm</button>
     <button class="tilbake ai-knapp" id="ai-knapp">Datamotstander: av</button>
     <button class="tilbake" data-go="meny">Meny</button>
   </div>
@@ -170,7 +184,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 <section class="view pad-vis" id="v-bla"></section>
 
 <template id="pad-mal">
-  <div class="pad-topp"><span class="lagnavn"></span><span class="score">0 – 0</span><a href="#meny">Bytt</a></div>
+  <div class="pad-topp"><span class="lagnavn"></span><span class="score">0 – 0</span><span><a href="#" class="fs-lenke">Fullskjerm</a> &nbsp; <a href="#meny">Bytt</a></span></div>
   <div class="kode-boks">
     <p>Skriv koden som står på TV-en.</p>
     <input class="kode-inn" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Kode fra TV-en">
@@ -205,7 +219,7 @@ function vis(){
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-go]');
-  if (b) { if (b.dataset.ai) setAi(true); location.hash = b.dataset.go; }
+  if (b) { if (b.dataset.ai) { setAi(true); nesteModus = 'solo'; } location.hash = b.dataset.go; }
 });
 addEventListener('hashchange', vis);
 
@@ -252,6 +266,7 @@ function startBane(m, kode){
   if (baneStartet) stoppBane();
   modus = m;
   $('#v-bane').classList.toggle('touch-modus', m !== 'tv');
+  $('#v-bane').classList.toggle('solo', m === 'solo');
   $('#ai-knapp').style.display = m === 'gjest' ? 'none' : '';
   $('#kode').textContent = '····'; $('#bane-status').textContent = '';
   nyKamp();
@@ -259,7 +274,9 @@ function startBane(m, kode){
   baneStartet = true;
   tilpass();
   try { if (m !== 'tv' && navigator.wakeLock) navigator.wakeLock.request('screen').then(w => wake = w).catch(()=>{}); } catch (e) {}
-  if (m === 'gjest') kobleGjest(kode); else kobleBane();
+  if (m === 'gjest') kobleGjest(kode);
+  else if (m === 'solo') melding('Klar?', 'Styr med venstre tommel, trykk SPARK for å starte');
+  else kobleBane();
 }
 function stoppBane(){
   try { banePeer && banePeer.destroy(); } catch (e) {}
@@ -402,7 +419,7 @@ function input(i){
   let x = 0, y = 0, spark = lokaleSpark[i];
   if (i === 0) { x = (keys.has('KeyD')?1:0) - (keys.has('KeyA')?1:0); y = (keys.has('KeyS')?1:0) - (keys.has('KeyW')?1:0); }
   else { x = (keys.has('ArrowRight')?1:0) - (keys.has('ArrowLeft')?1:0); y = (keys.has('ArrowDown')?1:0) - (keys.has('ArrowUp')?1:0); }
-  if (i === 0 && modus === 'vert' && Math.abs(lokalStikk.x) + Math.abs(lokalStikk.y) > 0.05) { x = lokalStikk.x; y = lokalStikk.y; }
+  if (i === 0 && (modus === 'vert' || modus === 'solo') && Math.abs(lokalStikk.x) + Math.abs(lokalStikk.y) > 0.05) { x = lokalStikk.x; y = lokalStikk.y; }
   const f = fjern[lag];
   if (f) { if (Math.abs(f.x) + Math.abs(f.y) > 0.05) { x = f.x; y = f.y; } spark = spark || f.spark; }
   const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
@@ -606,6 +623,32 @@ function loop(t){
   setInterval(() => { if (modus === 'gjest') sendGjest(); }, 250);
 })();
 
+/* ---------- fullskjerm ---------- */
+function fullskjerm(){
+  const el = document.documentElement;
+  const aktiv = document.fullscreenElement || document.webkitFullscreenElement;
+  if (aktiv) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+  const be = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (!be) { $('#tips').classList.add('on'); return; }
+  try {
+    const p = be.call(el, { navigationUI: 'hide' });
+    const lås = () => { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(()=>{}); } catch (e) {} };
+    if (p && p.then) p.then(lås).catch(() => $('#tips').classList.add('on')); else lås();
+  } catch (e) { $('#tips').classList.add('on'); }
+}
+$('#fullskjerm').addEventListener('click', fullskjerm);
+$('#tips-lukk').addEventListener('click', () => $('#tips').classList.remove('on'));
+document.addEventListener('click', e => { if (e.target.closest('.fs-lenke')) { e.preventDefault(); fullskjerm(); } });
+const fsEndret = () => {
+  const aktiv = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  $('#fullskjerm').textContent = aktiv ? 'Avslutt fullskjerm' : 'Fullskjerm';
+  setTimeout(() => { if (baneStartet) tilpass(); }, 100);
+};
+document.addEventListener('fullscreenchange', fsEndret);
+document.addEventListener('webkitfullscreenchange', fsEndret);
+// Skjul fullskjermknappen når spillet allerede kjører som Hjem-skjerm-app
+if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) $('#fullskjerm').style.display = 'none';
+
 /* ---------- lobby for to mobiler ---------- */
 (function(){
   const inn = $('#duell-kode'), feil = $('#duell-feil');
@@ -668,7 +711,7 @@ function byggPad(el, rolle){
       conn.on('data', d => { if (d && d.role === 'bane') { padBane = d; alle(); } });
       conn.on('close', () => { if (padConn === conn) { padConn = null; padBane = null; feil.textContent = 'Mistet kontakten med banen.'; alle(); } });
     } catch (e) {
-      feil.textContent = e && e.type === 'peer-unavailable' ? 'Fant ingen bane med koden ' + kode + '.' : 'Fikk ikke koblet til. Prøv igjen.';
+      feil.textContent = e && e.type === 'peer-unavailable' ? 'Fant ingen bane med koden ' + kode + '. Sjekk at banen er åpen og viser samme kode.' : 'Fikk ikke koblet til (' + ((e && e.type) || 'ukjent feil') + '). Prøv igjen, eller bruk samme wifi på begge.';
       return;
     }
     try { localStorage.setItem('sofafotball-kode', kode); } catch (e) {}
