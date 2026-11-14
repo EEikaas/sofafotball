@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sofafotball</title>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;700;800&display=swap">
+<style>
+:root{
+  --bg:#e9f0e4;--ink:#12241a;--muted:#4b6253;--card:#ffffff;--line:#c4d3c0;
+  --gul:#f2bd14;--gul-ink:#3a2b00;--bla:#2456d6;--bla-ink:#ffffff;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1912;--ink:#e4eee4;--muted:#9ab19f;--card:#17261c;--line:#2a3e2f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1912;--ink:#e4eee4;--muted:#9ab19f;--card:#17261c;--line:#2a3e2f;color-scheme:dark}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Saira Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.view{display:none;height:100%;width:100%}
+.view.on{display:flex}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-offset:3px}
+
+/* Meny */
+#v-meny{align-items:center;justify-content:center;padding:24px;overflow:auto}
+.meny{max-width:520px;width:100%}
+.meny h1{font-size:clamp(52px,14vw,92px);line-height:.85;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+.meny h1 span{display:block;color:var(--muted);font-weight:500;font-size:.42em;letter-spacing:0;margin-top:10px}
+.meny ol{padding-left:1.2em;margin:18px 0 26px;font-size:19px;line-height:1.35;color:var(--muted)}
+.meny ol li{margin-bottom:6px}
+.knapper{display:grid;gap:10px}
+.knapp{padding:16px 20px;border-radius:14px;font-size:22px;font-weight:700;text-align:left;display:flex;justify-content:space-between;align-items:center}
+.knapp small{font-weight:500;font-size:16px;opacity:.75}
+.k-bane{background:var(--ink);color:var(--bg)}
+.k-gul{background:var(--gul);color:var(--gul-ink)}
+.k-bla{background:var(--bla);color:var(--bla-ink)}
+.rad{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Bane */
+#v-bane{position:relative;background:#173d22;overflow:hidden}
+#bane{width:100%;height:100%;display:block}
+.tavle{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;align-items:stretch;border-radius:10px;overflow:hidden;font-weight:800;font-size:clamp(22px,3.4vw,40px);box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.tavle div{padding:4px 16px;display:flex;align-items:center;gap:10px}
+.t-gul{background:var(--gul);color:var(--gul-ink)}
+.t-bla{background:var(--bla);color:var(--bla-ink)}
+.t-tid{background:#0d1a10;color:#fff;font-variant-numeric:tabular-nums;font-weight:700}
+.t-gul i,.t-bla i{font-style:normal;font-weight:500;font-size:.6em}
+.info{position:absolute;left:12px;bottom:10px;color:#e8f3e8;font-size:clamp(15px,1.8vw,22px);display:flex;gap:16px;align-items:center;flex-wrap:wrap;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.info b{font-size:1.6em;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.prikk{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:6px;vertical-align:middle;border:2px solid #fff;opacity:.35}
+.prikk.on{opacity:1}
+.melding{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;color:#fff;text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.6)}
+.melding h2{margin:0;font-size:clamp(48px,11vw,140px);font-weight:800;line-height:.9}
+.melding p{margin:8px 0 0;font-size:clamp(18px,2.6vw,30px);font-weight:500}
+.tilbake{position:absolute;right:12px;bottom:10px;background:rgba(0,0,0,.35);color:#fff;padding:6px 12px;border-radius:8px;font-size:16px}
+
+/* Kontroller */
+.pad-vis{flex-direction:column;height:100%;background:var(--lag);color:var(--lag-ink);touch-action:none}
+#v-gul{--lag:var(--gul);--lag-ink:var(--gul-ink)}
+#v-bla{--lag:var(--bla);--lag-ink:var(--bla-ink)}
+.pad-topp{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-size:20px;font-weight:700}
+.pad-topp .score{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.pad-topp a{color:inherit;opacity:.7;font-weight:500;font-size:16px}
+.kode-boks{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;text-align:center}
+.kode-boks p{margin:0;font-size:20px;max-width:22em}
+.kode-boks input{font:inherit;font-size:54px;font-weight:800;width:5.2ch;text-align:center;letter-spacing:.12em;padding:4px 8px;border-radius:12px;border:3px solid currentColor;background:rgba(255,255,255,.85);color:#12241a}
+.kode-boks button{background:var(--lag-ink);color:var(--lag);padding:14px 34px;border-radius:12px;font-size:24px;font-weight:800}
+.feil{min-height:1.4em;font-size:17px;font-weight:700}
+.pad{flex:1;display:none;position:relative}
+.pad.on{display:flex}
+.stikk-sone{flex:1.2;position:relative;touch-action:none}
+.stikk-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.55;pointer-events:none;text-align:center;padding:12px}
+.stikk-base,.stikk-knott{position:absolute;border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%)}
+.stikk-base{width:150px;height:150px;border:4px solid currentColor;opacity:.4}
+.stikk-knott{width:70px;height:70px;background:var(--lag-ink);opacity:.9}
+.spark-sone{flex:1;display:flex;align-items:center;justify-content:center}
+.spark{width:min(42vw,42vh,190px);height:min(42vw,42vh,190px);border-radius:50%;background:var(--lag-ink);color:var(--lag);font-size:34px;font-weight:800;touch-action:none;box-shadow:0 8px 0 rgba(0,0,0,.25);transition:transform .06s}
+.spark.ned{transform:translateY(6px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.status{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:15px;opacity:.75;pointer-events:none}
+</style>
+</head>
+<body>
+
+<section class="view" id="v-meny">
+  <div class="meny">
+    <h1>Sofafotball<span>To mobiler, én TV, én ball</span></h1>
+    <ol>
+      <li>Åpne «Vis banen» på iPaden, Macen eller mobilen du speiler til TV-en med AirPlay.</li>
+      <li>Hver spiller åpner denne siden på sin egen mobil og velger lag.</li>
+      <li>Tast inn den firesifrede koden som står nede til venstre på TV-en. Ingen konto trengs.</li>
+    </ol>
+    <div class="knapper">
+      <button class="knapp k-bane" data-go="bane">Vis banen <small>til TV-en</small></button>
+      <div class="rad">
+        <button class="knapp k-gul" data-go="gul">Gul <small>kontroller</small></button>
+        <button class="knapp k-bla" data-go="bla">Blå <small>kontroller</small></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-bane">
+  <canvas id="bane"></canvas>
+  <div class="tavle">
+    <div class="t-gul"><i>Gul</i><span id="s0">0</span></div>
+    <div class="t-tid" id="klokke">3:00</div>
+    <div class="t-bla"><span id="s1">0</span><i>Blå</i></div>
+  </div>
+  <div class="info">
+    <span>Kode <b id="kode">····</b></span>
+    <span><span class="prikk" id="p-gul" style="background:var(--gul)"></span>Gul</span>
+    <span><span class="prikk" id="p-bla" style="background:var(--bla)"></span>Blå</span>
+    <span id="bane-status"></span>
+  </div>
+  <div class="melding"><h2 id="m-tittel"></h2><p id="m-tekst"></p></div>
+  <button class="tilbake" data-go="meny">Meny</button>
+</section>
+
+<section class="view pad-vis" id="v-gul"></section>
+<section class="view pad-vis" id="v-bla"></section>
+
+<template id="pad-mal">
+  <div class="pad-topp"><span class="lagnavn"></span><span class="score">0 – 0</span><a href="#meny">Bytt</a></div>
+  <div class="kode-boks">
+    <p>Skriv koden som står på TV-en.</p>
+    <input class="kode-inn" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Kode fra TV-en">
+    <button class="bli-med">Bli med</button>
+    <div class="feil"></div>
+  </div>
+  <div class="pad">
+    <div class="stikk-sone"><div class="stikk-hint">Dra med tommelen her for å løpe</div><div class="stikk-base"></div><div class="stikk-knott"></div></div>
+    <div class="spark-sone"><button class="spark">SPARK</button></div>
+    <div class="status"></div>
+  </div>
+</template>
+
+<script>
+(function(){
+const $ = (s, r=document) => r.querySelector(s);
+const PEER_ID = k => 'sofafotball-v1-' + k;
+const harPeer = typeof window.Peer === 'function';
+const urlKode = (new URLSearchParams(location.search).get('kode') || '').replace(/\D/g, '').slice(0, 4);
+const LAG = ['gul','bla'];
+
+/* ---------- ruter ---------- */
+const VIEWS = ['meny','bane','gul','bla'];
+function vis(){
+  const h = location.hash.slice(1);
+  const v = VIEWS.includes(h) ? h : 'meny';
+  document.querySelectorAll('.view').forEach(e => e.classList.toggle('on', e.id === 'v-' + v));
+  if (v === 'bane') startBane();
+  if (v === 'gul' || v === 'bla') startPad(v);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]');
+  if (b) location.hash = b.dataset.go;
+});
+addEventListener('hashchange', vis);
+
+/* ================= BANEN ================= */
+const W = 1000, H = 600, M = 70, GH = 170, GD = 46, GT = (H - GH) / 2, GB = GT + GH;
+const PR = 24, BR = 12, SPD = 320, KAMPTID = 180;
+const canvas = $('#bane'), ctx = canvas.getContext('2d');
+let game, banePeer = null, banekode = null, baneStartet = false, sist = 0;
+const keys = new Set();
+const fjern = { gul: null, bla: null };
+const tilkoblinger = new Map();               // conn -> siste input      // fjernkontroll-input
+const sisteSpark = {};                         // peer -> siste k
+
+function nyKamp(){
+  game = { score: [0,0], tid: KAMPTID, tilstand: 'klar', pause: 0,
+    ball: { x: W/2, y: H/2, vx: 0, vy: 0 },
+    pl: [ { x: W*0.25, y: H/2, vx: 0, vy: 0, cd: 0, fx: 0, dx: 1, dy: 0 },
+          { x: W*0.75, y: H/2, vx: 0, vy: 0, cd: 0, fx: 0, dx: -1, dy: 0 } ] };
+  melding('Klar?', 'Spark for å starte');
+  tavle();
+}
+function plasser(){
+  const g = game;
+  Object.assign(g.ball, { x: W/2, y: H/2, vx: 0, vy: 0 });
+  Object.assign(g.pl[0], { x: W*0.25, y: H/2, vx: 0, vy: 0 });
+  Object.assign(g.pl[1], { x: W*0.75, y: H/2, vx: 0, vy: 0 });
+}
+function melding(t, p){ $('#m-tittel').textContent = t || ''; $('#m-tekst').textContent = p || ''; }
+function tavle(){
+  $('#s0').textContent = game.score[0];
+  $('#s1').textContent = game.score[1];
+  const s = Math.max(0, Math.ceil(game.tid));
+  $('#klokke').textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  const msg = { role: 'bane', score: game.score, tilstand: game.tilstand };
+  for (const conn of tilkoblinger.keys()) { try { if (conn.open) conn.send(msg); } catch (e) {} }
+}
+
+function startBane(){
+  if (baneStartet) return;
+  baneStartet = true;
+  nyKamp();
+  addEventListener('resize', tilpass);
+  tilpass();
+  requestAnimationFrame(loop);
+  kobleBane();
+}
+function kobleBane(forsok = 0){
+  if (!harPeer) { $('#bane-status').textContent = 'Fikk ikke lastet nettverksbiblioteket – spill med tastatur (WASD + mellomrom, piler + Enter)'; return; }
+  const kode = String(Math.floor(1000 + Math.random() * 9000));
+  const peer = new Peer(PEER_ID(kode));
+  peer.on('open', () => {
+    banePeer = peer; banekode = kode;
+    $('#kode').textContent = kode;
+    $('#bane-status').textContent = 'Mobiler: ' + location.host + location.pathname + '?kode=' + kode;
+  });
+  peer.on('error', e => {
+    if (e.type === 'unavailable-id' && forsok < 5) { peer.destroy(); kobleBane(forsok + 1); return; }
+    if (!banePeer) $('#bane-status').textContent = 'Fikk ikke koblet til (' + e.type + '). Sjekk nettet og last siden på nytt.';
+  });
+  peer.on('disconnected', () => { try { peer.reconnect(); } catch (e) {} });
+  peer.on('connection', conn => {
+    conn.on('open', () => { tilkoblinger.set(conn, null); tavle(); });
+    conn.on('data', d => {
+      if (!d || typeof d !== 'object' || !LAG.includes(d.role)) return;
+      tilkoblinger.set(conn, { role: d.role, x: +d.x || 0, y: +d.y || 0, k: +d.k || 0, t: performance.now() });
+    });
+    const borte = () => { tilkoblinger.delete(conn); delete sisteSpark[conn.connectionId]; };
+    conn.on('close', borte); conn.on('error', borte);
+  });
+}
+
+function lesFjern(){
+  fjern.gul = fjern.bla = null;
+  for (const [conn, pr] of tilkoblinger) {
+    if (!pr) continue;
+    const p = { peer: conn.connectionId, updatedAt: pr.t };
+    const x = Math.max(-1, Math.min(1, +pr.x || 0)), y = Math.max(-1, Math.min(1, +pr.y || 0));
+    const k = Number.isFinite(+pr.k) ? +pr.k : 0;
+    let spark = false;
+    if (p.peer in sisteSpark) { if (k !== sisteSpark[p.peer]) spark = true; }
+    sisteSpark[p.peer] = k;
+    // Nyeste oppdatering vinner hvis to mobiler valgte samme lag
+    const f = fjern[pr.role];
+    if (!f || p.updatedAt > f.t) fjern[pr.role] = { x, y, spark: spark || (f && f.spark), t: p.updatedAt };
+  }
+  $('#p-gul').classList.toggle('on', !!fjern.gul);
+  $('#p-bla').classList.toggle('on', !!fjern.bla);
+}
+
+const lokaleSpark = [false, false];
+addEventListener('keydown', e => {
+  if (!baneStartet) return;
+  keys.add(e.code);
+  if (e.code === 'Space') { lokaleSpark[0] = true; e.preventDefault(); }
+  if (e.code === 'Enter' || e.code === 'ShiftRight') { lokaleSpark[1] = true; e.preventDefault(); }
+  if (e.code.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', e => keys.delete(e.code));
+
+function input(i){
+  const lag = LAG[i];
+  let x = 0, y = 0, spark = lokaleSpark[i];
+  if (i === 0) { x = (keys.has('KeyD')?1:0) - (keys.has('KeyA')?1:0); y = (keys.has('KeyS')?1:0) - (keys.has('KeyW')?1:0); }
+  else { x = (keys.has('ArrowRight')?1:0) - (keys.has('ArrowLeft')?1:0); y = (keys.has('ArrowDown')?1:0) - (keys.has('ArrowUp')?1:0); }
+  const f = fjern[lag];
+  if (f) { if (Math.abs(f.x) + Math.abs(f.y) > 0.05) { x = f.x; y = f.y; } spark = spark || f.spark; }
+  const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
+  lokaleSpark[i] = false;
+  return { x, y, spark };
+}
+
+function steg(dt){
+  const g = game, b = g.ball;
+  const inn = [input(0), input(1)];
+
+  if (g.tilstand === 'klar' || g.tilstand === 'slutt') {
+    if (inn[0].spark || inn[1].spark) {
+      if (g.tilstand === 'slutt') { nyKamp(); }
+      g.tilstand = 'spill'; melding(); tavle();
+    }
+  }
+  if (g.tilstand === 'mal') {
+    g.pause -= dt;
+    if (g.pause <= 0) { plasser(); g.tilstand = 'spill'; melding(); tavle(); }
+  }
+  if (g.tilstand === 'spill') {
+    const før = Math.ceil(g.tid);
+    g.tid -= dt;
+    if (Math.ceil(g.tid) !== før) tavle();
+    if (g.tid <= 0) {
+      g.tid = 0; g.tilstand = 'slutt';
+      const [a, c] = g.score;
+      melding('Full tid', (a === c ? 'Uavgjort ' : (a > c ? 'Gul vinner ' : 'Blå vinner ')) + a + '–' + c + ' · spark for ny kamp');
+      tavle();
+    }
+  }
+  const aktiv = g.tilstand === 'spill';
+
+  // Spillere
+  g.pl.forEach((p, i) => {
+    const s = aktiv ? inn[i] : { x: 0, y: 0, spark: false };
+    const r = Math.min(1, dt * 12);
+    p.vx += (s.x * SPD - p.vx) * r;
+    p.vy += (s.y * SPD - p.vy) * r;
+    p.x = Math.max(PR, Math.min(W - PR, p.x + p.vx * dt));
+    p.y = Math.max(PR, Math.min(H - PR, p.y + p.vy * dt));
+    if (Math.hypot(s.x, s.y) > 0.2) { const l = Math.hypot(s.x, s.y); p.dx = s.x / l; p.dy = s.y / l; }
+    p.cd = Math.max(0, p.cd - dt); p.fx = Math.max(0, p.fx - dt);
+    if (s.spark && p.cd <= 0) {
+      p.cd = 0.3; p.fx = 0.18;
+      const dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy);
+      if (d < PR + BR + 22) {
+        const nx = d > 0 ? dx / d : p.dx, ny = d > 0 ? dy / d : p.dy;
+        b.vx = nx * 760 + p.vx * 0.3;
+        b.vy = ny * 760 + p.vy * 0.3;
+      }
+    }
+  });
+  // Spiller mot spiller
+  {
+    const [p, q] = g.pl, dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy);
+    if (d < PR * 2 && d > 0) { const o = (PR * 2 - d) / 2, nx = dx / d, ny = dy / d; p.x -= nx * o; p.y -= ny * o; q.x += nx * o; q.y += ny * o; }
+  }
+
+  // Ball
+  b.x += b.vx * dt; b.y += b.vy * dt;
+  const fr = Math.pow(0.42, dt); b.vx *= fr; b.vy *= fr;
+
+  g.pl.forEach(p => {
+    const dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy), min = PR + BR;
+    if (d < min && d > 0) {
+      const nx = dx / d, ny = dy / d;
+      b.x = p.x + nx * min; b.y = p.y + ny * min;
+      const rel = (b.vx - p.vx) * nx + (b.vy - p.vy) * ny;
+      if (rel < 0) { b.vx -= 1.5 * rel * nx; b.vy -= 1.5 * rel * ny; }
+    }
+  });
+
+  const iMal = b.y > GT + 2 && b.y < GB - 2;
+  // Topp/bunn
+  if (b.y < BR) { b.y = BR; b.vy = Math.abs(b.vy) * 0.8; }
+  if (b.y > H - BR) { b.y = H - BR; b.vy = -Math.abs(b.vy) * 0.8; }
+  // Kortsider og mål
+  if (b.x < BR && !iMal && b.x > -BR) { b.x = BR; b.vx = Math.abs(b.vx) * 0.8; }
+  if (b.x > W - BR && !iMal && b.x < W + BR) { b.x = W - BR; b.vx = -Math.abs(b.vx) * 0.8; }
+  if (b.x < 0 || b.x > W) { // inne i nettet
+    if (b.y < GT + BR) { b.y = GT + BR; b.vy = Math.abs(b.vy) * 0.5; }
+    if (b.y > GB - BR) { b.y = GB - BR; b.vy = -Math.abs(b.vy) * 0.5; }
+    if (b.x < -GD + BR) { b.x = -GD + BR; b.vx = Math.abs(b.vx) * 0.3; }
+    if (b.x > W + GD - BR) { b.x = W + GD - BR; b.vx = -Math.abs(b.vx) * 0.3; }
+  }
+  // Stolper
+  for (const [px, py] of [[0, GT], [0, GB], [W, GT], [W, GB]]) {
+    const dx = b.x - px, dy = b.y - py, d = Math.hypot(dx, dy), min = BR + 5;
+    if (d < min && d > 0) {
+      const nx = dx / d, ny = dy / d; b.x = px + nx * min; b.y = py + ny * min;
+      const v = b.vx * nx + b.vy * ny; if (v < 0) { b.vx -= 1.7 * v * nx; b.vy -= 1.7 * v * ny; }
+    }
+  }
+  if (aktiv && (b.x < -BR || b.x > W + BR)) {
+    const lag = b.x < 0 ? 1 : 0;
+    g.score[lag]++; g.tilstand = 'mal'; g.pause = 2.2;
+    melding('MÅL!', (lag === 0 ? 'Gul' : 'Blå') + ' scorer · ' + g.score[0] + '–' + g.score[1]);
+    tavle();
+  }
+}
+
+/* ---------- tegning ---------- */
+let skala = 1, ox = 0, oy = 0, dpr = 1;
+function tilpass(){
+  dpr = Math.min(2, window.devicePixelRatio || 1);
+  const r = canvas.getBoundingClientRect();
+  canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+  skala = Math.min(canvas.width / (W + M * 2), canvas.height / (H + M * 2));
+  ox = (canvas.width - W * skala) / 2; oy = (canvas.height - H * skala) / 2 + 14 * dpr;
+}
+function tegn(){
+  const g = game, c = ctx;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.fillStyle = '#173d22'; c.fillRect(0, 0, canvas.width, canvas.height);
+  c.setTransform(skala, 0, 0, skala, ox, oy);
+  // Gress med klippestriper
+  for (let i = 0; i < 10; i++) { c.fillStyle = i % 2 ? '#2d8a3c' : '#339645'; c.fillRect(i * W / 10, 0, W / 10, H); }
+  c.strokeStyle = 'rgba(255,255,255,.88)'; c.lineWidth = 4;
+  c.strokeRect(0, 0, W, H);
+  c.beginPath(); c.moveTo(W/2, 0); c.lineTo(W/2, H); c.stroke();
+  c.beginPath(); c.arc(W/2, H/2, 80, 0, Math.PI * 2); c.stroke();
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(W/2, H/2, 5, 0, Math.PI * 2); c.fill();
+  const sh = 330, sw = 140;
+  c.strokeRect(0, (H - sh) / 2, sw, sh); c.strokeRect(W - sw, (H - sh) / 2, sw, sh);
+  c.strokeRect(0, GT - 30, 50, GH + 60); c.strokeRect(W - 50, GT - 30, 50, GH + 60);
+  c.beginPath(); c.arc(sw - 40, H/2, 70, -0.9, 0.9); c.stroke();
+  c.beginPath(); c.arc(W - sw + 40, H/2, 70, Math.PI - 0.9, Math.PI + 0.9); c.stroke();
+  // Mål med nett
+  for (const [x0, farge] of [[-GD, '#f2bd14'], [W, '#2456d6']]) {
+    c.fillStyle = 'rgba(255,255,255,.12)'; c.fillRect(x0, GT, GD, GH);
+    c.strokeStyle = 'rgba(255,255,255,.35)'; c.lineWidth = 1.5;
+    for (let x = x0; x <= x0 + GD; x += 9) { c.beginPath(); c.moveTo(x, GT); c.lineTo(x, GB); c.stroke(); }
+    for (let y = GT; y <= GB; y += 9) { c.beginPath(); c.moveTo(x0, y); c.lineTo(x0 + GD, y); c.stroke(); }
+    c.strokeStyle = farge; c.lineWidth = 6; c.strokeRect(x0, GT, GD, GH);
+  }
+  // Spillere
+  const farger = [['#f2bd14', '#3a2b00'], ['#2456d6', '#ffffff']];
+  g.pl.forEach((p, i) => {
+    c.fillStyle = 'rgba(0,0,0,.25)'; c.beginPath(); c.ellipse(p.x + 4, p.y + 6, PR, PR * 0.85, 0, 0, Math.PI * 2); c.fill();
+    if (p.fx > 0) { c.strokeStyle = 'rgba(255,255,255,' + (p.fx / 0.18) + ')'; c.lineWidth = 4; c.beginPath(); c.arc(p.x, p.y, PR + 10 + (0.18 - p.fx) * 60, 0, Math.PI * 2); c.stroke(); }
+    c.fillStyle = farger[i][0]; c.beginPath(); c.arc(p.x, p.y, PR, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = farger[i][1]; c.lineWidth = 3; c.stroke();
+    c.fillStyle = farger[i][1]; c.beginPath(); c.arc(p.x + p.dx * (PR - 8), p.y + p.dy * (PR - 8), 5, 0, Math.PI * 2); c.fill();
+  });
+  // Ball
+  const b = g.ball;
+  c.fillStyle = 'rgba(0,0,0,.3)'; c.beginPath(); c.ellipse(b.x + 3, b.y + 5, BR, BR * 0.8, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(b.x, b.y, BR, 0, Math.PI * 2); c.fill();
+  c.strokeStyle = '#1a1a1a'; c.lineWidth = 1.5; c.stroke();
+  c.fillStyle = '#1a1a1a'; c.beginPath(); c.arc(b.x, b.y, 4, 0, Math.PI * 2); c.fill();
+}
+function loop(t){
+  const dt = Math.min(0.033, (t - sist) / 1000 || 0.016); sist = t;
+  lesFjern();
+  // Fast tidssteg for jevn fysikk
+  const n = Math.ceil(dt / 0.008);
+  for (let i = 0; i < n; i++) steg(dt / n);
+  for (const l of LAG) if (fjern[l]) fjern[l].spark = false;
+  tegn();
+  requestAnimationFrame(loop);
+}
+
+/* ================= KONTROLLER ================= */
+const pads = {};
+let padPeer = null, padConn = null, padBane = null, padRolle = null, padKode = null, wake = null;
+const padInn = { x: 0, y: 0, k: 0 };
+
+function send(){
+  if (!padConn || !padConn.open) return;
+  try { padConn.send({ role: padRolle, x: +padInn.x.toFixed(2), y: +padInn.y.toFixed(2), k: padInn.k }); } catch (e) {}
+}
+
+function startPad(rolle){
+  padRolle = rolle;
+  const el = $('#v-' + rolle);
+  if (!pads[rolle]) pads[rolle] = byggPad(el, rolle);
+  pads[rolle].oppdater();
+  send();
+}
+
+function byggPad(el, rolle){
+  el.appendChild($('#pad-mal').content.cloneNode(true));
+  $('.lagnavn', el).textContent = rolle === 'gul' ? 'Gul spiller' : 'Blå spiller';
+  const inn = $('.kode-inn', el), feil = $('.feil', el), boks = $('.kode-boks', el), pad = $('.pad', el), status = $('.status', el), score = $('.score', el);
+  try { const k = localStorage.getItem('sofafotball-kode'); if (k) inn.value = k; } catch (e) {}
+  if (urlKode) inn.value = urlKode;
+
+  async function blimed(){
+    const kode = inn.value.replace(/\D/g, '');
+    if (kode.length !== 4) { feil.textContent = 'Koden har fire sifre.'; return; }
+    feil.textContent = 'Kobler til …';
+    if (!harPeer) { feil.textContent = 'Fikk ikke lastet nettverksbiblioteket. Sjekk nettet og last siden på nytt.'; return; }
+    const alle = () => Object.values(pads).forEach(p => p.oppdater());
+    try {
+      if (padConn) { padConn.close(); padConn = null; padBane = null; }
+      if (!padPeer || padPeer.destroyed) {
+        padPeer = new Peer();
+        await new Promise((ok, nei) => { padPeer.once('open', ok); padPeer.once('error', nei); });
+        padPeer.on('disconnected', () => { try { padPeer.reconnect(); } catch (e) {} });
+      }
+      const conn = padPeer.connect(PEER_ID(kode), { serialization: 'json' });
+      await new Promise((ok, nei) => {
+        const t = setTimeout(() => nei({ type: 'timeout' }), 10000);
+        conn.once('open', () => { clearTimeout(t); ok(); });
+        padPeer.once('error', e => { clearTimeout(t); nei(e); });
+      });
+      padConn = conn; padKode = kode;
+      conn.on('data', d => { if (d && d.role === 'bane') { padBane = d; alle(); } });
+      conn.on('close', () => { if (padConn === conn) { padConn = null; padBane = null; feil.textContent = 'Mistet kontakten med banen.'; alle(); } });
+    } catch (e) {
+      feil.textContent = e && e.type === 'peer-unavailable' ? 'Fant ingen bane med koden ' + kode + '.' : 'Fikk ikke koblet til. Prøv igjen.';
+      return;
+    }
+    try { localStorage.setItem('sofafotball-kode', kode); } catch (e) {}
+    feil.textContent = '';
+    send();
+    try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) {}
+    Object.values(pads).forEach(p => p.oppdater());
+  }
+  $('.bli-med', el).addEventListener('click', blimed);
+  inn.addEventListener('keydown', e => { if (e.key === 'Enter') blimed(); });
+
+  // Styrespak
+  const sone = $('.stikk-sone', el), base = $('.stikk-base', el), knott = $('.stikk-knott', el), hint = $('.stikk-hint', el);
+  let id = null, sx = 0, sy = 0; const R = 65;
+  sone.addEventListener('pointerdown', e => {
+    if (id !== null) return;
+    id = e.pointerId; sone.setPointerCapture(id);
+    const r = sone.getBoundingClientRect(); sx = e.clientX - r.left; sy = e.clientY - r.top;
+    base.style.left = knott.style.left = sx + 'px'; base.style.top = knott.style.top = sy + 'px';
+    base.style.display = knott.style.display = 'block'; hint.style.display = 'none';
+    e.preventDefault();
+  });
+  sone.addEventListener('pointermove', e => {
+    if (e.pointerId !== id) return;
+    const r = sone.getBoundingClientRect();
+    let dx = e.clientX - r.left - sx, dy = e.clientY - r.top - sy;
+    const d = Math.hypot(dx, dy); if (d > R) { dx *= R / d; dy *= R / d; }
+    knott.style.left = (sx + dx) + 'px'; knott.style.top = (sy + dy) + 'px';
+    padInn.x = dx / R; padInn.y = dy / R; send();
+  });
+  const slipp = e => {
+    if (e.pointerId !== id) return;
+    id = null; padInn.x = padInn.y = 0; send();
+    base.style.display = knott.style.display = 'none';
+  };
+  sone.addEventListener('pointerup', slipp); sone.addEventListener('pointercancel', slipp);
+
+  const spark = $('.spark', el);
+  spark.addEventListener('pointerdown', e => {
+    e.preventDefault(); spark.classList.add('ned');
+    padInn.k++; send();
+    if (navigator.vibrate) navigator.vibrate(25);
+  });
+  const opp = () => spark.classList.remove('ned');
+  spark.addEventListener('pointerup', opp); spark.addEventListener('pointercancel', opp); spark.addEventListener('pointerleave', opp);
+
+  return {
+    oppdater(){
+      const med = !!padConn;
+      boks.style.display = med ? 'none' : 'flex';
+      pad.classList.toggle('on', med);
+      if (!med) return;
+      const bane = padBane ? { presence: padBane } : null;
+      if (bane) {
+        const s = Array.isArray(bane.presence.score) ? bane.presence.score : [0, 0];
+        score.textContent = (+s[0] || 0) + ' – ' + (+s[1] || 0);
+        const t = bane.presence.tilstand;
+        status.textContent = 'Kode ' + padKode + ' · ' + (t === 'klar' || t === 'slutt' ? 'Trykk SPARK for å starte' : 'Tilkoblet');
+      } else {
+        status.textContent = 'Kode ' + padKode + ' · venter på banen …';
+      }
+    }
+  };
+}
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && padConn && navigator.wakeLock) { try { wake = await navigator.wakeLock.request('screen'); } catch (e) {} }
+});
+
+if (urlKode && !location.hash) location.hash = 'meny';
+vis();
+})();
+</script>
+</body>
+</html>
