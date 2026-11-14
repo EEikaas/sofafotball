@@ -22,52 +22,37 @@
 :root[data-theme="dark"]{--bg:#0e1912;--ink:#e4eee4;--muted:#9ab19f;--card:#17261c;--line:#2a3e2f;color-scheme:dark}
 *{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Saira Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Saira Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 .view{display:none;height:100%;width:100%}
 .view.on{display:flex}
 button{font:inherit;cursor:pointer;border:0}
 button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-offset:3px}
 
 /* Meny */
-#v-meny{align-items:center;justify-content:center;padding:24px;overflow:auto}
-.meny{max-width:520px;width:100%}
+.meny-vis{align-items:center;justify-content:center;padding:24px;overflow:auto}
+.meny{max-width:520px;width:100%;margin:auto}
 .meny h1{font-size:clamp(52px,14vw,92px);line-height:.85;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
 .meny h1 span{display:block;color:var(--muted);font-weight:500;font-size:.42em;letter-spacing:0;margin-top:10px}
-.meny ol{padding-left:1.2em;margin:18px 0 26px;font-size:19px;line-height:1.35;color:var(--muted)}
+.meny ol{padding-left:1.2em;margin:18px 0 22px;font-size:19px;line-height:1.35;color:var(--muted)}
 .meny ol li{margin-bottom:6px}
+.meny .hjelp{font-size:17px;line-height:1.4;color:var(--muted);margin:20px 0 0}
 .knapper{display:grid;gap:10px}
-.knapp{padding:16px 20px;border-radius:14px;font-size:22px;font-weight:700;text-align:left;display:flex;justify-content:space-between;align-items:center}
-.knapp small{font-weight:500;font-size:16px;opacity:.75}
+.knapp{padding:16px 20px;border-radius:14px;font-size:22px;font-weight:700;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.knapp small{font-weight:500;font-size:16px;opacity:.75;text-align:right}
 .k-bane{background:var(--ink);color:var(--bg)}
 .k-gul{background:var(--gul);color:var(--gul-ink)}
 .k-bla{background:var(--bla);color:var(--bla-ink)}
 .k-ai{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.rad{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .duell-bli{display:grid;grid-template-columns:auto 1fr;gap:10px}
 #duell-kode{font:inherit;font-size:30px;font-weight:800;width:4.6ch;text-align:center;letter-spacing:.1em;border-radius:14px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
 .duell-feil{min-height:1.4em;font-size:17px;font-weight:700}
-.touch{position:absolute;inset:0;display:none;color:#fff;pointer-events:none}
-.touch-modus .touch{display:block}
-.t-stikk{position:absolute;left:0;top:64px;bottom:0;width:55%;pointer-events:auto;touch-action:none}
-.touch .stikk-knott{background:rgba(255,255,255,.85)}
-.t-spark{position:absolute;right:calc(20px + env(safe-area-inset-right,0px));bottom:24px;width:112px;height:112px;border-radius:50%;pointer-events:auto;touch-action:none;background:rgba(255,255,255,.22);border:3px solid rgba(255,255,255,.8);color:#fff;font-size:22px;font-weight:800}
-.t-spark.ned{background:rgba(255,255,255,.5)}
-.touch-modus .info{top:10px;bottom:auto}
-.solo .info{display:none}
-.tips{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(90vw,420px);background:#fff;color:#12241a;border-radius:14px;padding:18px 20px;font-size:19px;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;z-index:5}
-.tips.on{display:block}
-.tips button{margin-top:12px;background:#12241a;color:#fff;padding:8px 18px;border-radius:10px;font-size:18px;font-weight:700}
-.touch-modus .info > span:not(:first-child){display:none}
-.touch-modus .t-spark{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
-.touch-modus .bane-knapper{top:10px;bottom:auto}
-.snu{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(10,30,15,.92);color:#fff;font-size:26px;font-weight:700}
-@media (orientation:portrait){.touch-modus .snu{display:flex}}
-.rad{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* Bane */
 #v-bane{position:relative;background:#173d22;overflow:hidden}
 #bane{width:100%;height:100%;display:block}
-.tavle{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;align-items:stretch;border-radius:10px;overflow:hidden;font-weight:800;font-size:clamp(22px,3.4vw,40px);box-shadow:0 4px 14px rgba(0,0,0,.35)}
-.tavle div{padding:4px 16px;display:flex;align-items:center;gap:10px}
+.tavle{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;align-items:stretch;border-radius:10px;overflow:hidden;font-weight:800;font-size:clamp(20px,3.4vw,40px);box-shadow:0 4px 14px rgba(0,0,0,.35);pointer-events:none}
+.tavle div{padding:3px 14px;display:flex;align-items:center;gap:10px}
 .t-gul{background:var(--gul);color:var(--gul-ink)}
 .t-bla{background:var(--bla);color:var(--bla-ink)}
 .t-tid{background:#0d1a10;color:#fff;font-variant-numeric:tabular-nums;font-weight:700}
@@ -76,14 +61,45 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 .info b{font-size:1.6em;letter-spacing:.08em;font-variant-numeric:tabular-nums}
 .prikk{display:inline-block;width:.7em;height:.7em;border-radius:50%;margin-right:6px;vertical-align:middle;border:2px solid #fff;opacity:.35}
 .prikk.on{opacity:1}
-.melding{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;color:#fff;text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.6)}
-.melding h2{margin:0;font-size:clamp(48px,11vw,140px);font-weight:800;line-height:.9}
-.melding p{margin:8px 0 0;font-size:clamp(18px,2.6vw,30px);font-weight:500}
+.melding{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;color:#fff;text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.6);padding:0 20px}
+.melding h2{margin:0;font-size:clamp(44px,11vw,140px);font-weight:800;line-height:.9}
+.melding p{margin:8px 0 0;font-size:clamp(18px,2.6vw,30px);font-weight:600}
 .bane-knapper{position:absolute;right:12px;bottom:10px;display:flex;gap:8px}
-.ai-knapp.pa{background:#fff;color:#12241a}
 .tilbake{background:rgba(0,0,0,.35);color:#fff;padding:6px 12px;border-radius:8px;font-size:16px}
+.ai-knapp.pa{background:#fff;color:#12241a}
+.tips{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(90vw,420px);background:#fff;color:#12241a;border-radius:14px;padding:18px 20px;font-size:19px;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;z-index:5}
+.tips.on{display:block}
+.tips button{margin-top:12px;background:#12241a;color:#fff;padding:8px 18px;border-radius:10px;font-size:18px;font-weight:700}
+.touch{position:absolute;inset:0;display:none;color:#fff;pointer-events:none}
+.touch-modus .touch{display:block}
+.touch-modus .info{top:10px;bottom:auto}
+.touch-modus .info > span:not(:first-child){display:none}
+.touch-modus .bane-knapper{top:10px;bottom:auto}
+.solo .info{display:none}
+.touch .stikk-sone{position:absolute;left:0;top:64px;bottom:0;width:50%;pointer-events:auto}
+.touch .stikk-hint{display:none}
+.touch .stikk-knott{background:rgba(255,255,255,.85)}
+.snu{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(10,30,15,.92);color:#fff;font-size:26px;font-weight:700;pointer-events:auto}
+@media (orientation:portrait){.touch-modus .snu{display:flex}}
 
-/* Kontroller */
+/* Styrespak og knapper (felles) */
+.stikk-sone{position:relative;touch-action:none}
+.stikk-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.55;pointer-events:none;text-align:center;padding:12px}
+.stikk-base,.stikk-knott{position:absolute;border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%)}
+.stikk-base{width:140px;height:140px;border:4px solid currentColor;opacity:.4}
+.stikk-knott{width:64px;height:64px;opacity:.9}
+.klynge{--s:92px;position:relative;width:calc(var(--s)*1.85);height:calc(var(--s)*1.85);flex:none}
+.touch .klynge{position:absolute;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));pointer-events:auto}
+.kb{position:absolute;border-radius:50%;font-weight:800;touch-action:none;overflow:hidden;display:flex;align-items:center;justify-content:center;transition:transform .06s;-webkit-user-select:none;user-select:none}
+.kb b{position:relative;pointer-events:none}
+.kb .lading{position:absolute;left:0;right:0;bottom:0;height:var(--c,0%);background:rgba(255,90,40,.8);pointer-events:none}
+.kb.ned{transform:translateY(3px) scale(.97)}
+.kb-spark{right:0;bottom:0;width:var(--s);height:var(--s);font-size:calc(var(--s)*.21)}
+.kb-lobb{right:calc(var(--s)*1.1);bottom:0;width:calc(var(--s)*.72);height:calc(var(--s)*.72);font-size:calc(var(--s)*.17)}
+.kb-takle{right:0;bottom:calc(var(--s)*1.1);width:calc(var(--s)*.72);height:calc(var(--s)*.72);font-size:calc(var(--s)*.17)}
+.touch .kb{background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.8);color:#fff}
+
+/* Kontroller-visning */
 .pad-vis{flex-direction:column;height:100%;background:var(--lag);color:var(--lag-ink);touch-action:none}
 #v-gul{--lag:var(--gul);--lag-ink:var(--gul-ink)}
 #v-bla{--lag:var(--bla);--lag-ink:var(--bla-ink)}
@@ -97,20 +113,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 .feil{min-height:1.4em;font-size:17px;font-weight:700}
 .pad{flex:1;display:none;position:relative}
 .pad.on{display:flex}
-.stikk-sone{flex:1.2;position:relative;touch-action:none}
-.stikk-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.55;pointer-events:none;text-align:center;padding:12px}
-.stikk-base,.stikk-knott{position:absolute;border-radius:50%;pointer-events:none;display:none;transform:translate(-50%,-50%)}
-.stikk-base{width:150px;height:150px;border:4px solid currentColor;opacity:.4}
-.stikk-knott{width:70px;height:70px;background:var(--lag-ink);opacity:.9}
-.spark-sone{flex:1;display:flex;align-items:center;justify-content:center}
-.spark{width:min(42vw,42vh,190px);height:min(42vw,42vh,190px);border-radius:50%;background:var(--lag-ink);color:var(--lag);font-size:34px;font-weight:800;touch-action:none;box-shadow:0 8px 0 rgba(0,0,0,.25);transition:transform .06s}
-.spark.ned{transform:translateY(6px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.pad .stikk-sone{flex:1}
+.pad .stikk-knott{background:var(--lag-ink)}
+.pad .klynge{--s:min(34vh,22vw,150px);align-self:center;margin:0 max(5vw,env(safe-area-inset-right,0px)) 0 12px}
+.pad .kb{background:var(--lag-ink);color:var(--lag);box-shadow:0 6px 0 rgba(0,0,0,.25)}
 .status{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:15px;opacity:.75;pointer-events:none}
 </style>
 </head>
 <body>
 
-<section class="view" id="v-meny">
+<section class="view meny-vis" id="v-meny">
   <div class="meny">
     <h1>Sofafotball<span>To mobiler, én TV, én ball</span></h1>
     <ol>
@@ -127,6 +139,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
       <button class="knapp k-ai" data-go="duell">To mobiler <small>hver sin skjerm, uten TV</small></button>
       <button class="knapp k-ai" data-go="bane" data-ai="1">1 spiller <small>mot datamaskinen, på denne mobilen</small></button>
     </div>
+    <p class="hjelp">Hold inne SPARK eller LOBB for mer kraft, og slipp for å sparke. LOBB sender ballen gjennom lufta over motspilleren. TAKLE er en glidetakling: treffer du ballen først, er den ren, men tar du mannen i eget felt, blir det straffe. Går ballen ut, blir det innkast, corner eller utspark. Sikt med styrespaken og spark.</p>
   </div>
 </section>
 
@@ -135,18 +148,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
   <div class="tavle">
     <div class="t-gul"><i>Gul</i><span id="s0">0</span></div>
     <div class="t-tid" id="klokke">3:00</div>
-    <div class="t-bla"><span id="s1">0</span><i>Blå</i></div>
+    <div class="t-bla"><span id="s1">0</span><i id="n-bla">Blå</i></div>
   </div>
   <div class="info">
     <span>Kode <b id="kode">····</b></span>
     <span><span class="prikk" id="p-gul" style="background:var(--gul)"></span>Gul</span>
-    <span><span class="prikk" id="p-bla" style="background:var(--bla)"></span><span id="n-bla">Blå</span></span>
+    <span><span class="prikk" id="p-bla" style="background:var(--bla)"></span>Blå</span>
     <span id="bane-status"></span>
   </div>
   <div class="melding"><h2 id="m-tittel"></h2><p id="m-tekst"></p></div>
-  <div class="touch">
-    <div class="t-stikk"><div class="stikk-base"></div><div class="stikk-knott"></div></div>
-    <button class="t-spark">SPARK</button>
+  <div class="touch" id="touch">
     <div class="snu">Snu mobilen på tvers for å spille</div>
   </div>
   <div class="tips" id="tips">
@@ -160,7 +171,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
   </div>
 </section>
 
-<section class="view" id="v-duell" style="align-items:center;justify-content:center;padding:24px;overflow:auto">
+<section class="view meny-vis" id="v-duell">
   <div class="meny">
     <h1>To mobiler<span>Banen og kontrollene på hver sin mobil</span></h1>
     <ol>
@@ -183,6 +194,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
 <section class="view pad-vis" id="v-gul"></section>
 <section class="view pad-vis" id="v-bla"></section>
 
+<template id="kontroll-mal">
+  <div class="stikk-sone"><div class="stikk-hint">Dra med tommelen her for å løpe</div><div class="stikk-base"></div><div class="stikk-knott"></div></div>
+  <div class="klynge">
+    <button class="kb kb-takle" data-k="t"><b>TAKLE</b></button>
+    <button class="kb kb-lobb" data-k="l"><span class="lading"></span><b>LOBB</b></button>
+    <button class="kb kb-spark" data-k="s"><span class="lading"></span><b>SPARK</b></button>
+  </div>
+</template>
+
 <template id="pad-mal">
   <div class="pad-topp"><span class="lagnavn"></span><span class="score">0 – 0</span><span><a href="#" class="fs-lenke">Fullskjerm</a> &nbsp; <a href="#meny">Bytt</a></span></div>
   <div class="kode-boks">
@@ -191,22 +211,84 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--bla);outline-of
     <button class="bli-med">Bli med</button>
     <div class="feil"></div>
   </div>
-  <div class="pad">
-    <div class="stikk-sone"><div class="stikk-hint">Dra med tommelen her for å løpe</div><div class="stikk-base"></div><div class="stikk-knott"></div></div>
-    <div class="spark-sone"><button class="spark">SPARK</button></div>
-    <div class="status"></div>
-  </div>
+  <div class="pad"><div class="status"></div></div>
 </template>
 
 <script>
 (function(){
+'use strict';
 const $ = (s, r=document) => r.querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const PEER_ID = k => 'sofafotball-v1-' + k;
 const harPeer = typeof window.Peer === 'function';
 const urlKode = (new URLSearchParams(location.search).get('kode') || '').replace(/\D/g, '').slice(0, 4);
-const LAG = ['gul','bla'];
+const LAG = ['gul','bla'], NAVN = ['Gul','Blå'];
+const LADETID = 900;   // ms til full kraft
+let wake = null;
+const vib = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
 
-/* ---------- ruter ---------- */
+/* ================= KONTROLLER-KOMPONENT ================= */
+function nyKtl(){ return { x: 0, y: 0, c: 0, ct: null, k: 0, kp: 0, kt: 's', tk: 0 }; }
+function lagKontroller(root, onChange){
+  root.appendChild($('#kontroll-mal').content.cloneNode(true));
+  const ktl = nyKtl();
+  const sone = $('.stikk-sone', root), base = $('.stikk-base', root), knott = $('.stikk-knott', root), hint = $('.stikk-hint', root);
+  let id = null, sx = 0, sy = 0; const R = 60;
+  sone.addEventListener('pointerdown', e => {
+    if (id !== null) return;
+    id = e.pointerId; try { sone.setPointerCapture(id); } catch (_) {}
+    const r = sone.getBoundingClientRect(); sx = e.clientX - r.left; sy = e.clientY - r.top;
+    base.style.left = knott.style.left = sx + 'px'; base.style.top = knott.style.top = sy + 'px';
+    base.style.display = knott.style.display = 'block'; hint.style.display = 'none';
+    e.preventDefault();
+  });
+  sone.addEventListener('pointermove', e => {
+    if (e.pointerId !== id) return;
+    const r = sone.getBoundingClientRect();
+    let dx = e.clientX - r.left - sx, dy = e.clientY - r.top - sy;
+    const d = Math.hypot(dx, dy); if (d > R) { dx *= R / d; dy *= R / d; }
+    knott.style.left = (sx + dx) + 'px'; knott.style.top = (sy + dy) + 'px';
+    ktl.x = dx / R; ktl.y = dy / R; onChange();
+  });
+  const slippStikk = e => {
+    if (e.pointerId !== id) return;
+    id = null; ktl.x = ktl.y = 0; onChange();
+    base.style.display = knott.style.display = 'none';
+  };
+  sone.addEventListener('pointerup', slippStikk); sone.addEventListener('pointercancel', slippStikk);
+
+  let ladeStart = 0, ladeTimer = null;
+  root.querySelectorAll('[data-k]').forEach(btn => {
+    const type = btn.dataset.k;
+    btn.addEventListener('contextmenu', e => e.preventDefault());
+    btn.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+      btn.classList.add('ned');
+      if (type === 't') { ktl.tk++; vib(15); onChange(); return; }
+      if (ktl.ct) return;
+      ktl.ct = type; ktl.c = 0; ladeStart = performance.now();
+      clearInterval(ladeTimer);
+      ladeTimer = setInterval(() => {
+        ktl.c = Math.min(1, (performance.now() - ladeStart) / LADETID);
+        btn.style.setProperty('--c', (ktl.c * 100) + '%'); onChange();
+      }, 50);
+    });
+    const slipp = () => {
+      btn.classList.remove('ned');
+      if (type === 't' || ktl.ct !== type) return;
+      clearInterval(ladeTimer);
+      const c = Math.min(1, (performance.now() - ladeStart) / LADETID);
+      ktl.k++; ktl.kp = Math.max(0.12, c); ktl.kt = type; ktl.c = 0; ktl.ct = null;
+      btn.style.setProperty('--c', '0%'); vib(25); onChange();
+    };
+    btn.addEventListener('pointerup', slipp); btn.addEventListener('pointercancel', slipp);
+  });
+  return ktl;
+}
+const pakk = (rolle, k) => ({ role: rolle, x: +k.x.toFixed(2), y: +k.y.toFixed(2), c: +k.c.toFixed(2), k: k.k, kp: +k.kp.toFixed(2), kt: k.kt, tk: k.tk });
+
+/* ================= RUTER ================= */
 const VIEWS = ['meny','bane','gul','bla','duell'];
 let nesteModus = null, nesteKode = null;
 function vis(){
@@ -226,40 +308,48 @@ addEventListener('hashchange', vis);
 /* ================= BANEN ================= */
 const W = 1000, H = 600, M = 70, GH = 170, GD = 46, GT = (H - GH) / 2, GB = GT + GH;
 const PR = 24, BR = 12, SPD = 320, KAMPTID = 180;
+const BAR = 40, HODE = 38, G = 900;               // tverrligger, hodehøyde, tyngdekraft
+const BOKS_D = 140, BOKS_H = 330, STRAFFE = 105;
+const TEKST = { innkast: 'Innkast', corner: 'Corner', utspark: 'Utspark', straffe: 'Straffe' };
 const canvas = $('#bane'), ctx = canvas.getContext('2d');
-let modus = 'tv';                              // tv | vert | gjest
-let gjestPeer = null, gjestConn = null, sisteSnap = 0;
-const lokalStikk = { x: 0, y: 0 };
-let game, banePeer = null, banekode = null, baneStartet = false, sist = 0;
+let modus = 'tv';                                  // tv | vert | gjest | solo | stopp
+let game, banePeer = null, gjestPeer = null, gjestConn = null, baneStartet = false, sist = 0, sisteSnap = 0;
+const tilkoblinger = new Map();                    // conn -> siste kontrollerdata
+const kb = [nyKtl(), nyKtl()], kbStart = [0, 0];
 const keys = new Set();
-const fjern = { gul: null, bla: null };
-const tilkoblinger = new Map();               // conn -> siste input      // fjernkontroll-input
-const sisteSpark = {};                         // peer -> siste k
+const sistHendelse = {};
+const aiState = [{ stuck: 0 }, { stuck: 0 }];
+let gjeldende = ['', ''];
+let aiPa = false;
 
+function nySpiller(x, dx){
+  return { x, y: H / 2, vx: 0, vy: 0, dx, dy: 0, cd: 0, fx: 0, c: 0, stun: 0, lunge: 0, tcd: 0, ldx: 0, ldy: 0, lball: false, lhit: false };
+}
 function nyKamp(){
-  game = { score: [0,0], tid: KAMPTID, tilstand: 'klar', pause: 0,
-    ball: { x: W/2, y: H/2, vx: 0, vy: 0 },
-    pl: [ { x: W*0.25, y: H/2, vx: 0, vy: 0, cd: 0, fx: 0, dx: 1, dy: 0 },
-          { x: W*0.75, y: H/2, vx: 0, vy: 0, cd: 0, fx: 0, dx: -1, dy: 0 } ] };
-  melding('Klar?', 'Spark for å starte');
+  game = { score: [0, 0], tid: KAMPTID, tilstand: 'klar', pause: 0, sist: -1, fast: null, meldT: 0,
+    ball: { x: W / 2, y: H / 2, z: 0, vx: 0, vy: 0, vz: 0 },
+    pl: [nySpiller(W * 0.25, 1), nySpiller(W * 0.75, -1)] };
+  melding('Klar?', modus === 'solo' ? 'Styr med venstre tommel, trykk SPARK for å starte' : 'Spark for å starte');
   tavle();
 }
 function plasser(){
   const g = game;
-  Object.assign(g.ball, { x: W/2, y: H/2, vx: 0, vy: 0 });
-  Object.assign(g.pl[0], { x: W*0.25, y: H/2, vx: 0, vy: 0 });
-  Object.assign(g.pl[1], { x: W*0.75, y: H/2, vx: 0, vy: 0 });
+  Object.assign(g.ball, { x: W / 2, y: H / 2, z: 0, vx: 0, vy: 0, vz: 0 });
+  Object.assign(g.pl[0], nySpiller(W * 0.25, 1));
+  Object.assign(g.pl[1], nySpiller(W * 0.75, -1));
+  g.sist = -1;
 }
-let gjeldende = ['', ''];
 function melding(t, p){ gjeldende = [t || '', p || '']; $('#m-tittel').textContent = gjeldende[0]; $('#m-tekst').textContent = gjeldende[1]; }
+function kortMelding(tekst, sek){ melding('', tekst); game.meldT = sek; }
+function visKlokke(t){ const s = Math.max(0, Math.ceil(t)); $('#klokke').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 function tavle(){
   $('#s0').textContent = game.score[0];
   $('#s1').textContent = game.score[1];
-  const s = Math.max(0, Math.ceil(game.tid));
-  $('#klokke').textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  visKlokke(game.tid);
   const msg = { role: 'bane', score: game.score, tilstand: game.tilstand };
   for (const conn of tilkoblinger.keys()) { try { if (conn.open) conn.send(msg); } catch (e) {} }
 }
+const iBoks = (x, y, eier) => Math.abs(y - H / 2) < BOKS_H / 2 && (eier === 0 ? x < BOKS_D : x > W - BOKS_D);
 
 function startBane(m, kode){
   if (baneStartet && m === modus) { tilpass(); return; }
@@ -273,10 +363,9 @@ function startBane(m, kode){
   if (!baneStartet) { addEventListener('resize', tilpass); requestAnimationFrame(loop); }
   baneStartet = true;
   tilpass();
-  try { if (m !== 'tv' && navigator.wakeLock) navigator.wakeLock.request('screen').then(w => wake = w).catch(()=>{}); } catch (e) {}
+  try { if (m !== 'tv' && navigator.wakeLock) navigator.wakeLock.request('screen').then(w => wake = w).catch(() => {}); } catch (e) {}
   if (m === 'gjest') kobleGjest(kode);
-  else if (m === 'solo') melding('Klar?', 'Styr med venstre tommel, trykk SPARK for å starte');
-  else kobleBane();
+  else if (m !== 'solo') kobleBane();
 }
 function stoppBane(){
   try { banePeer && banePeer.destroy(); } catch (e) {}
@@ -286,7 +375,37 @@ function stoppBane(){
   modus = 'stopp';
 }
 
-/* Gjest: viser vertens kamp og sender egen styring som Blå */
+/* ---------- nettverk: vert / TV ---------- */
+function kobleBane(forsok = 0){
+  if (!harPeer) { $('#bane-status').textContent = 'Fikk ikke lastet nettverksbiblioteket – spill med tastatur'; return; }
+  const kode = String(Math.floor(1000 + Math.random() * 9000));
+  const peer = new Peer(PEER_ID(kode));
+  const minModus = modus;
+  peer.on('open', () => {
+    if (modus !== minModus) { peer.destroy(); return; }
+    banePeer = peer;
+    $('#kode').textContent = kode;
+    if (modus === 'vert') { if (game.tilstand === 'klar' && !tilkoblinger.size) melding('Kode ' + kode, 'Motspilleren velger «To mobiler», taster koden og trykker «Bli med»'); }
+    else $('#bane-status').textContent = 'Mobiler: ' + location.host + location.pathname + '?kode=' + kode;
+  });
+  peer.on('error', e => {
+    if (modus !== minModus) return;
+    if (e.type === 'unavailable-id' && forsok < 5) { peer.destroy(); kobleBane(forsok + 1); return; }
+    if (!banePeer) $('#bane-status').textContent = 'Fikk ikke koblet til (' + e.type + '). Sjekk nettet og last siden på nytt.';
+  });
+  peer.on('disconnected', () => { try { peer.reconnect(); } catch (e) {} });
+  peer.on('connection', conn => {
+    conn.on('open', () => {
+      tilkoblinger.set(conn, null); tavle();
+      if (modus === 'vert' && game.tilstand === 'klar') melding('Klar?', 'Motspilleren er med · spark for å starte');
+    });
+    conn.on('data', d => { if (d && typeof d === 'object' && LAG.includes(d.role)) tilkoblinger.set(conn, d); });
+    const borte = () => tilkoblinger.delete(conn);
+    conn.on('close', borte); conn.on('error', borte);
+  });
+}
+
+/* ---------- nettverk: gjest (to mobiler) ---------- */
 function kobleGjest(kode){
   melding('Kobler til …', 'Kode ' + kode);
   $('#kode').textContent = kode;
@@ -301,90 +420,100 @@ function kobleGjest(kode){
   });
   peer.on('error', e => {
     if (gjestPeer !== peer) return;
-    melding('Fikk ikke koblet til', e.type === 'peer-unavailable' ? 'Fant ingen kamp med koden ' + kode : 'Sjekk nettet og prøv igjen');
+    melding('Fikk ikke koblet til', e.type === 'peer-unavailable' ? 'Fant ingen kamp med koden ' + kode : 'Sjekk nettet og prøv igjen (' + e.type + ')');
   });
   peer.on('disconnected', () => { try { peer.reconnect(); } catch (e) {} });
 }
-let gjestK = 0;
 function sendGjest(){
-  if (!gjestConn || !gjestConn.open) return;
-  try { gjestConn.send({ role: 'bla', x: +lokalStikk.x.toFixed(2), y: +lokalStikk.y.toFixed(2), k: gjestK }); } catch (e) {}
+  if (!gjestConn || !gjestConn.open || !touchKtl) return;
+  try { gjestConn.send(pakk('bla', touchKtl)); } catch (e) {}
 }
 function lagSnap(){
-  const g = game, r1 = v => Math.round(v * 10) / 10;
-  return { b: [r1(g.ball.x), r1(g.ball.y)],
-    p: g.pl.map(p => [r1(p.x), r1(p.y), +p.dx.toFixed(2), +p.dy.toFixed(2), +p.fx.toFixed(2)]),
+  const g = game, r = v => Math.round(v * 10) / 10, f = g.fast;
+  return { b: [r(g.ball.x), r(g.ball.y), r(g.ball.z)],
+    p: g.pl.map(p => [r(p.x), r(p.y), +p.dx.toFixed(2), +p.dy.toFixed(2), +p.fx.toFixed(2), +p.c.toFixed(2), p.stun > 0 ? 1 : 0, p.lunge > 0 ? 1 : 0]),
+    fa: f ? [r(f.bx), r(f.by), +f.ax.toFixed(2), +f.ay.toFixed(2)] : 0,
     t: Math.ceil(g.tid), m: gjeldende };
 }
 function brukSnap(d){
   const g = game, s = d.snap;
-  g.ball.x = s.b[0]; g.ball.y = s.b[1];
-  s.p.forEach((q, i) => Object.assign(g.pl[i], { x: q[0], y: q[1], dx: q[2], dy: q[3], fx: q[4] }));
-  g.score = Array.isArray(d.score) ? d.score.map(n => +n || 0) : g.score;
+  if (!Array.isArray(s.b) || !Array.isArray(s.p)) return;
+  g.ball.x = +s.b[0] || 0; g.ball.y = +s.b[1] || 0; g.ball.z = +s.b[2] || 0;
+  s.p.forEach((q, i) => { if (g.pl[i] && Array.isArray(q)) Object.assign(g.pl[i], { x: +q[0], y: +q[1], dx: +q[2], dy: +q[3], fx: +q[4], c: +q[5] || 0, stun: q[6] ? 1 : 0, lunge: q[7] ? 1 : 0, ldx: +q[2], ldy: +q[3] }); });
+  g.fast = Array.isArray(s.fa) ? { bx: +s.fa[0], by: +s.fa[1], ax: +s.fa[2], ay: +s.fa[3] } : null;
+  if (Array.isArray(d.score)) g.score = d.score.map(n => +n || 0);
   g.tid = +s.t || 0; g.tilstand = d.tilstand;
   if (Array.isArray(s.m) && (s.m[0] !== gjeldende[0] || s.m[1] !== gjeldende[1])) melding(String(s.m[0]), String(s.m[1]));
   $('#s0').textContent = g.score[0]; $('#s1').textContent = g.score[1];
-  const t = Math.max(0, g.tid); $('#klokke').textContent = Math.floor(t/60) + ':' + String(t%60).padStart(2,'0');
-}
-function kobleBane(forsok = 0){
-  if (!harPeer) { $('#bane-status').textContent = 'Fikk ikke lastet nettverksbiblioteket – spill med tastatur (WASD + mellomrom, piler + Enter)'; return; }
-  const kode = String(Math.floor(1000 + Math.random() * 9000));
-  const peer = new Peer(PEER_ID(kode));
-  const minModus = modus;
-  peer.on('open', () => {
-    if (modus !== minModus) { peer.destroy(); return; }
-    banePeer = peer; banekode = kode;
-    $('#kode').textContent = kode;
-    if (modus === 'vert') { if (game.tilstand === 'klar' && !tilkoblinger.size) melding('Kode ' + kode, 'Motspilleren velger «To mobiler», taster koden og trykker «Bli med»'); }
-    else $('#bane-status').textContent = 'Mobiler: ' + location.host + location.pathname + '?kode=' + kode;
-  });
-  peer.on('error', e => {
-    if (modus !== minModus) return;
-    if (e.type === 'unavailable-id' && forsok < 5) { peer.destroy(); kobleBane(forsok + 1); return; }
-    if (!banePeer) $('#bane-status').textContent = 'Fikk ikke koblet til (' + e.type + '). Sjekk nettet og last siden på nytt.';
-  });
-  peer.on('disconnected', () => { try { peer.reconnect(); } catch (e) {} });
-  peer.on('connection', conn => {
-    conn.on('open', () => { tilkoblinger.set(conn, null); tavle(); if (modus === 'vert' && game.tilstand === 'klar') melding('Klar?', 'Motspilleren er med · spark for å starte'); });
-    conn.on('data', d => {
-      if (!d || typeof d !== 'object' || !LAG.includes(d.role)) return;
-      tilkoblinger.set(conn, { role: d.role, x: +d.x || 0, y: +d.y || 0, k: +d.k || 0, t: performance.now() });
-    });
-    const borte = () => { tilkoblinger.delete(conn); delete sisteSpark[conn.connectionId]; };
-    conn.on('close', borte); conn.on('error', borte);
-  });
+  visKlokke(g.tid);
 }
 
-function lesFjern(){
-  fjern.gul = fjern.bla = null;
-  for (const [conn, pr] of tilkoblinger) {
-    if (!pr) continue;
-    const p = { peer: conn.connectionId, updatedAt: pr.t };
-    const x = Math.max(-1, Math.min(1, +pr.x || 0)), y = Math.max(-1, Math.min(1, +pr.y || 0));
-    const k = Number.isFinite(+pr.k) ? +pr.k : 0;
-    let spark = false;
-    if (p.peer in sisteSpark) { if (k !== sisteSpark[p.peer]) spark = true; }
-    sisteSpark[p.peer] = k;
-    // Nyeste oppdatering vinner hvis to mobiler valgte samme lag
-    const f = fjern[pr.role];
-    if (!f || p.updatedAt > f.t) fjern[pr.role] = { x, y, spark: spark || (f && f.spark), t: p.updatedAt };
-  }
-  $('#p-gul').classList.toggle('on', !!fjern.gul);
-  $('#p-bla').classList.toggle('on', !!fjern.bla);
-}
-
-const lokaleSpark = [false, false];
+/* ---------- input ---------- */
+const TASTER = [
+  { s: ['Space'], l: ['KeyE'], t: ['KeyQ'], opp: 'KeyW', ned: 'KeyS', v: 'KeyA', h: 'KeyD' },
+  { s: ['Enter', 'NumpadEnter'], l: ['ShiftRight', 'Period'], t: ['ControlRight', 'Minus', 'Slash'], opp: 'ArrowUp', ned: 'ArrowDown', v: 'ArrowLeft', h: 'ArrowRight' }
+];
 addEventListener('keydown', e => {
-  if (!baneStartet) return;
+  if (!baneStartet || e.target.tagName === 'INPUT') return;
   keys.add(e.code);
-  if (e.code === 'Space') { lokaleSpark[0] = true; e.preventDefault(); }
-  if (e.code === 'Enter' || e.code === 'ShiftRight') { lokaleSpark[1] = true; e.preventDefault(); }
-  if (e.code.startsWith('Arrow')) e.preventDefault();
+  TASTER.forEach((t, i) => {
+    const k = kb[i];
+    if (t.t.includes(e.code) && !e.repeat) k.tk++;
+    for (const type of ['s', 'l']) if (t[type].includes(e.code)) { e.preventDefault(); if (!e.repeat && !k.ct) { k.ct = type; k.c = 0; kbStart[i] = performance.now(); } }
+  });
+  if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault();
 });
-addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('keyup', e => {
+  keys.delete(e.code);
+  TASTER.forEach((t, i) => {
+    const k = kb[i];
+    for (const type of ['s', 'l']) if (t[type].includes(e.code) && k.ct === type) {
+      k.k++; k.kp = Math.max(0.12, Math.min(1, (performance.now() - kbStart[i]) / LADETID)); k.kt = type; k.ct = null; k.c = 0;
+    }
+  });
+});
 
-/* ---------- datamotstander (spiller Blå) ---------- */
-let aiPa = false;
+function hendelser(id, k){
+  const s = sistHendelse[id];
+  const kk = +k.k || 0, tk = +k.tk || 0;
+  sistHendelse[id] = { k: kk, tk };
+  if (!s) return { kick: null, tackle: false };
+  return { kick: kk !== s.k ? { p: clamp(+k.kp || 0.5, 0.1, 1), t: k.kt === 'l' ? 'l' : 's' } : null, tackle: tk !== s.tk };
+}
+function fjernKilder(i){
+  const ut = [];
+  for (const [conn, d] of tilkoblinger) if (d && d.role === LAG[i]) ut.push(['c' + conn.connectionId, d]);
+  return ut;
+}
+function samleInput(){
+  const nå = performance.now();
+  TASTER.forEach((t, i) => {
+    const k = kb[i];
+    k.x = (keys.has(t.h) ? 1 : 0) - (keys.has(t.v) ? 1 : 0);
+    k.y = (keys.has(t.ned) ? 1 : 0) - (keys.has(t.opp) ? 1 : 0);
+    if (k.ct) k.c = Math.min(1, (nå - kbStart[i]) / LADETID);
+  });
+  const res = [];
+  for (let i = 0; i < 2; i++) {
+    const fjern = fjernKilder(i);
+    const kilder = [...fjern];
+    if (i === 0 && (modus === 'vert' || modus === 'solo') && touchKtl) kilder.push(['touch', touchKtl]);
+    kilder.push(['kb' + i, kb[i]]);
+    let x = 0, y = 0, c = 0, kick = null, tackle = false;
+    for (const [id, k] of kilder) {
+      const kx = clamp(+k.x || 0, -1, 1), ky = clamp(+k.y || 0, -1, 1);
+      if (!x && !y && Math.abs(kx) + Math.abs(ky) > 0.05) { x = kx; y = ky; }
+      c = Math.max(c, clamp(+k.c || 0, 0, 1));
+      const e = hendelser(id, k); kick = kick || e.kick; tackle = tackle || e.tackle;
+    }
+    if (i === 1 && aiPa && !fjern.length) { res.push(aiInput(1)); continue; }
+    const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
+    res.push({ x, y, c, kick, tackle });
+  }
+  return res;
+}
+
+/* ---------- datamotstander ---------- */
 function setAi(v){
   aiPa = v;
   const k = $('#ai-knapp');
@@ -395,131 +524,274 @@ function setAi(v){
 $('#ai-knapp').addEventListener('click', () => setAi(!aiPa));
 
 function aiInput(i){
-  const g = game, p = g.pl[i], b = g.ball;
-  const retning = i === 0 ? 1 : -1;               // +1 angriper mot høyre
-  const malX = i === 0 ? W + GD / 2 : -GD / 2;
-  let mx = malX - b.x, my = H / 2 - b.y; const ml = Math.hypot(mx, my) || 1; mx /= ml; my /= ml;
-  // Er ballen bak oss (nærmere vårt eget mål)? Da løper vi rundt den.
-  const bak = (b.x - p.x) * retning < -8;
+  const g = game, p = g.pl[i], q = g.pl[1 - i], b = g.ball, a = aiState[i];
+  const dir = i === 0 ? 1 : -1, malX = i === 0 ? W + GD / 2 : -GD / 2, egenX = i === 0 ? 0 : W;
+  const r = { x: 0, y: 0, c: 0, kick: null, tackle: false };
+  const gåMot = (tx, ty, fart) => { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d > 4) { const s = Math.min(1, d / 40) * fart; r.x = dx / d * s; r.y = dy / d * s; } };
+
+  if (g.tilstand === 'fast') {
+    const f = g.fast;
+    if (f.lag === i) {
+      if (!f.aiMal) {
+        if (f.type === 'straffe') f.aiMal = [i === 0 ? W : 0, H / 2 + (Math.random() < 0.5 ? -1 : 1) * (GH / 2 - 22)];
+        else if (f.type === 'corner') f.aiMal = [i === 0 ? W - 85 : 85, H / 2 + (Math.random() * 2 - 1) * 40];
+        else f.aiMal = [f.bx + dir * 320, H / 2 + (Math.random() * 2 - 1) * 90];
+      }
+      const ax = f.aiMal[0] - f.bx, ay = f.aiMal[1] - f.by, l = Math.hypot(ax, ay) || 1;
+      r.x = ax / l; r.y = ay / l;
+      if (f.t > 1.1) {
+        const p0 = { straffe: 0.85, corner: 0.55, utspark: 0.8, innkast: 0.75 }[f.type];
+        r.kick = { p: p0 + Math.random() * 0.15, t: f.type === 'corner' || f.type === 'utspark' ? 'l' : 's' };
+      }
+    } else if (f.type === 'straffe') {
+      if (f.aiKeeper == null) f.aiKeeper = H / 2 + (Math.random() * 2 - 1) * 75;
+      const dy = f.aiKeeper - p.y; r.y = Math.abs(dy) > 4 ? Math.sign(dy) * 0.7 : 0;
+    } else {
+      gåMot((b.x + egenX) / 2, (b.y + H / 2) / 2, 0.7);
+    }
+    return r;
+  }
+  if (g.tilstand !== 'spill' || p.stun > 0) return r;
+
+  // Hvor vil vi sende ballen? Mot mål, men nær kanten blandes det inn retning mot midten
+  let mx = malX - b.x, my = H / 2 - b.y; let ml = Math.hypot(mx, my) || 1; mx /= ml; my /= ml;
+  const kant = Math.min(b.x, W - b.x, b.y, H - b.y);
+  if (kant < 70 || a.stuck > 1) {
+    let cx = W / 2 - b.x, cy = H / 2 - b.y; const cl = Math.hypot(cx, cy) || 1; cx /= cl; cy /= cl;
+    const w = a.stuck > 1 ? 1 : 0.65;
+    mx = mx * (1 - w) + cx * w; my = my * (1 - w) + cy * w; ml = Math.hypot(mx, my) || 1; mx /= ml; my /= ml;
+  }
+  const bx = b.x - p.x, by = b.y - p.y, bd = Math.hypot(bx, by) || 1;
+  const foran = (p.x - b.x) * mx + (p.y - b.y) * my;    // > 0: vi står på feil side av ballen
   let tx, ty;
-  if (bak) { tx = b.x - retning * (PR + BR + 34); ty = b.y + (p.y < b.y ? -48 : 48); }
-  else { tx = b.x - mx * (PR + BR - 4); ty = b.y - my * (PR + BR - 4); }
-  const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy);
-  let x = 0, y = 0;
-  if (d > 4) { const s = Math.min(1, d / 40) * 0.82; x = dx / d * s; y = dy / d * s; }
-  const bx = b.x - p.x, by = b.y - p.y, bd = Math.hypot(bx, by);
-  const sikter = bd > 0 && (bx / bd * mx + by / bd * my) > 0.8;
-  const spark = g.tilstand === 'spill' && bd < PR + BR + 16 && sikter && Math.random() < 0.06;
-  return { x, y, spark };
+  if (b.z > HODE) {                                      // ballen er i lufta: løp mot landingspunktet
+    const tl = (b.vz + Math.sqrt(b.vz * b.vz + 2 * G * b.z)) / G;
+    tx = b.x + b.vx * tl * 0.8; ty = b.y + b.vy * tl * 0.8;
+  } else if (foran > -6 && bd < 150) {                   // gå rundt ballen på siden
+    const sx = -my, sy = mx, side = ((p.x - b.x) * sx + (p.y - b.y) * sy) >= 0 ? 1 : -1;
+    tx = b.x - mx * (PR + BR + 22) + sx * side * (PR + BR + 20);
+    ty = b.y - my * (PR + BR + 22) + sy * side * (PR + BR + 20);
+  } else {
+    tx = b.x - mx * (PR + BR - 4); ty = b.y - my * (PR + BR - 4);
+  }
+  gåMot(tx, ty, 0.86);
+
+  // Låst-detektor: står vi inntil ballen uten at noe skjer, sikt mot midten og spark
+  if (bd < PR + BR + 16 && Math.hypot(b.vx, b.vy) < 70) a.stuck += 1 / 60; else a.stuck = Math.max(0, a.stuck - 1 / 30);
+  if (a.stuck > 2.5) a.stuck = 0;
+
+  const sikter = (bx / bd * mx + by / bd * my) > 0.78;
+  if (p.cd <= 0 && bd < PR + BR + 18 && b.z < HODE && (sikter || a.stuck > 1.6) && Math.random() < 0.09) {
+    const malAvst = Math.hypot(malX - b.x, H / 2 - b.y);
+    const blokk = Math.hypot(q.x - b.x, q.y - b.y) < 170 && ((q.x - b.x) * mx + (q.y - b.y) * my) > 20;
+    if (a.stuck > 1) r.kick = { p: 0.55, t: 's' };
+    else if (malAvst < 380) r.kick = { p: 0.7 + Math.random() * 0.3, t: 's' };
+    else if (blokk && Math.random() < 0.5) r.kick = { p: 0.45 + Math.random() * 0.3, t: 'l' };
+    else r.kick = { p: 0.28 + Math.random() * 0.2, t: 's' };
+  }
+  // Takling når motspilleren har ballen
+  const qBall = Math.hypot(q.x - b.x, q.y - b.y) < PR + BR + 25;
+  const qd = Math.hypot(q.x - p.x, q.y - p.y);
+  if (qBall && qd < 85 && p.tcd <= 0 && q.stun <= 0 && (bx / bd * p.dx + by / bd * p.dy) > 0.75) {
+    if (Math.random() < (iBoks(q.x, q.y, i) ? 0.006 : 0.035)) r.tackle = true;
+  }
+  return r;
 }
 
-function input(i){
-  const lag = LAG[i];
-  if (i === 1 && aiPa && !fjern.bla) { lokaleSpark[1] = false; return aiInput(1); }
-  let x = 0, y = 0, spark = lokaleSpark[i];
-  if (i === 0) { x = (keys.has('KeyD')?1:0) - (keys.has('KeyA')?1:0); y = (keys.has('KeyS')?1:0) - (keys.has('KeyW')?1:0); }
-  else { x = (keys.has('ArrowRight')?1:0) - (keys.has('ArrowLeft')?1:0); y = (keys.has('ArrowDown')?1:0) - (keys.has('ArrowUp')?1:0); }
-  if (i === 0 && (modus === 'vert' || modus === 'solo') && Math.abs(lokalStikk.x) + Math.abs(lokalStikk.y) > 0.05) { x = lokalStikk.x; y = lokalStikk.y; }
-  const f = fjern[lag];
-  if (f) { if (Math.abs(f.x) + Math.abs(f.y) > 0.05) { x = f.x; y = f.y; } spark = spark || f.spark; }
-  const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
-  lokaleSpark[i] = false;
-  return { x, y, spark };
+/* ---------- regler og fysikk ---------- */
+function spark(i, kick, retning){
+  const g = game, p = g.pl[i], b = g.ball;
+  if (p.cd > 0) return false;
+  p.cd = 0.28; p.fx = 0.18;
+  let nx, ny;
+  if (retning) { [nx, ny] = retning; }
+  else {
+    const dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy);
+    if (d > PR + BR + 22 || b.z > HODE) return false;
+    nx = d > 0 ? dx / d : p.dx; ny = d > 0 ? dy / d : p.dy;
+  }
+  const pw = kick.p;
+  if (kick.t === 'l') { const v = 190 + 400 * pw; b.vx = nx * v; b.vy = ny * v; b.vz = 240 + 330 * pw; b.z = Math.max(b.z, 1); }
+  else { const v = 260 + 760 * pw; b.vx = nx * v + (retning ? 0 : p.vx * 0.25); b.vy = ny * v + (retning ? 0 : p.vy * 0.25); }
+  g.sist = i;
+  return true;
+}
+function startFast(type, lag, bx, by){
+  const g = game, dir = lag === 0 ? 1 : -1;
+  let ax = dir, ay = 0;
+  if (type === 'innkast') { ax = dir * 0.6; ay = by < H / 2 ? 1 : -1; }
+  if (type === 'corner') { ax = (lag === 0 ? W - 90 : 90) - bx; ay = H / 2 - by; }
+  const l = Math.hypot(ax, ay); ax /= l; ay /= l;
+  g.fast = { type, lag, bx, by, ax, ay, t: 0, mx: lag === 0 ? W - PR : PR };
+  g.tilstand = 'fast';
+  Object.assign(g.ball, { x: bx, y: by, z: 0, vx: 0, vy: 0, vz: 0 });
+  g.pl.forEach(p => { p.lunge = 0; p.stun = 0; p.vx = p.vy = 0; });
+  if (type === 'straffe') { const k = g.pl[1 - lag]; k.x = g.fast.mx; k.y = H / 2; }
+  if (type === 'straffe') melding('Straffe!', NAVN[lag] + ' sikter med styrespaken og skyter');
+  else melding('', TEKST[type] + ' – ' + NAVN[lag] + ' · sikt med styrespaken');
+  tavle();
+}
+function gyldigSikte(f, ax, ay){
+  if (f.type === 'straffe') return ax * (f.lag === 0 ? 1 : -1) > 0.3;
+  const x = f.bx + ax * 80, y = f.by + ay * 80;
+  return x > 0 && x < W && y > 0 && y < H;
 }
 
-function steg(dt){
+function steg(dt, inn){
   const g = game, b = g.ball;
-  const inn = [input(0), input(1)];
-
   if (g.tilstand === 'klar' || g.tilstand === 'slutt') {
-    if (inn[0].spark || inn[1].spark) {
-      if (g.tilstand === 'slutt') { nyKamp(); }
+    if (inn[0].kick || inn[1].kick) {
+      if (g.tilstand === 'slutt') nyKamp();
       g.tilstand = 'spill'; melding(); tavle();
+      return;
     }
   }
   if (g.tilstand === 'mal') {
     g.pause -= dt;
     if (g.pause <= 0) { plasser(); g.tilstand = 'spill'; melding(); tavle(); }
   }
-  if (g.tilstand === 'spill') {
+  if (g.meldT > 0) { g.meldT -= dt; if (g.meldT <= 0 && g.tilstand === 'spill') melding(); }
+  if (g.tilstand === 'spill' || g.tilstand === 'fast') {
     const før = Math.ceil(g.tid);
     g.tid -= dt;
     if (Math.ceil(g.tid) !== før) tavle();
     if (g.tid <= 0) {
-      g.tid = 0; g.tilstand = 'slutt';
+      g.tid = 0; g.tilstand = 'slutt'; g.fast = null;
       const [a, c] = g.score;
       melding('Full tid', (a === c ? 'Uavgjort ' : (a > c ? 'Gul vinner ' : 'Blå vinner ')) + a + '–' + c + ' · spark for ny kamp');
       tavle();
+      return;
     }
   }
-  const aktiv = g.tilstand === 'spill';
+  const spill = g.tilstand === 'spill', fast = g.tilstand === 'fast';
 
   // Spillere
   g.pl.forEach((p, i) => {
-    const s = aktiv ? inn[i] : { x: 0, y: 0, spark: false };
-    const r = Math.min(1, dt * 12);
-    p.vx += (s.x * SPD - p.vx) * r;
-    p.vy += (s.y * SPD - p.vy) * r;
-    p.x = Math.max(PR, Math.min(W - PR, p.x + p.vx * dt));
-    p.y = Math.max(PR, Math.min(H - PR, p.y + p.vy * dt));
-    if (Math.hypot(s.x, s.y) > 0.2) { const l = Math.hypot(s.x, s.y); p.dx = s.x / l; p.dy = s.y / l; }
+    const s = inn[i], styr = spill || fast;
     p.cd = Math.max(0, p.cd - dt); p.fx = Math.max(0, p.fx - dt);
-    if (s.spark && p.cd <= 0) {
-      p.cd = 0.3; p.fx = 0.18;
-      const dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy);
-      if (d < PR + BR + 22) {
-        const nx = d > 0 ? dx / d : p.dx, ny = d > 0 ? dy / d : p.dy;
-        b.vx = nx * 760 + p.vx * 0.3;
-        b.vy = ny * 760 + p.vy * 0.3;
-      }
+    p.stun = Math.max(0, p.stun - dt); p.tcd = Math.max(0, p.tcd - dt);
+    p.c = styr ? s.c : 0;
+    if (p.lunge > 0) { p.lunge -= dt; p.vx = p.ldx * 640; p.vy = p.ldy * 640; }
+    else if (!styr || p.stun > 0) { const f = Math.pow(0.02, dt); p.vx *= f; p.vy *= f; }
+    else {
+      const r = Math.min(1, dt * 12);
+      p.vx += (s.x * SPD - p.vx) * r; p.vy += (s.y * SPD - p.vy) * r;
+      const l = Math.hypot(s.x, s.y); if (l > 0.2) { p.dx = s.x / l; p.dy = s.y / l; }
+    }
+    if (spill && s.tackle && p.tcd <= 0 && p.stun <= 0 && p.lunge <= 0) {
+      p.lunge = 0.26; p.tcd = 1.2; p.ldx = p.dx; p.ldy = p.dy; p.lball = false; p.lhit = false;
+    }
+    p.x = clamp(p.x + p.vx * dt, -40, W + 40);
+    p.y = clamp(p.y + p.vy * dt, -40, H + 40);
+    if (spill && s.kick && p.stun <= 0 && p.lunge <= 0) spark(i, s.kick);
+  });
+
+  // Dødball: ballen ligger stille, den som tar den sikter
+  if (fast) {
+    const f = g.fast; f.t += dt;
+    const tk = g.pl[f.lag], mot = g.pl[1 - f.lag], s = inn[f.lag];
+    const sl = Math.hypot(s.x, s.y);
+    if (sl > 0.35 && gyldigSikte(f, s.x / sl, s.y / sl)) { f.ax = s.x / sl; f.ay = s.y / sl; }
+    tk.x = f.bx - f.ax * (PR + BR + 4); tk.y = f.by - f.ay * (PR + BR + 4);
+    tk.vx = tk.vy = 0; tk.dx = f.ax; tk.dy = f.ay;
+    Object.assign(b, { x: f.bx, y: f.by, z: 0, vx: 0, vy: 0, vz: 0 });
+    if (f.type === 'straffe') { mot.x = f.mx; mot.vx = 0; mot.y = clamp(mot.y, GT + 6, GB - 6); }
+    else {
+      const dx = mot.x - f.bx, dy = mot.y - f.by, d = Math.hypot(dx, dy) || 1;
+      if (d < 110) { mot.x = f.bx + dx / d * 110; mot.y = f.by + dy / d * 110; }
+    }
+    let kick = s.kick;
+    if (!kick && f.t > 8) kick = { p: 0.5, t: f.type === 'utspark' ? 'l' : 's' };
+    if (kick && f.t > 0.45) {
+      const k = { p: f.type === 'innkast' ? kick.p * 0.6 : kick.p, t: kick.t };
+      tk.cd = 0; spark(f.lag, k, [f.ax, f.ay]); tk.cd = 0.4;
+      g.tilstand = 'spill'; g.fast = null; melding(); tavle();
+    }
+    return;
+  }
+
+  // Takling
+  if (spill) g.pl.forEach((p, i) => {
+    if (p.lunge <= 0) return;
+    const q = g.pl[1 - i];
+    if (!p.lball && b.z < HODE && Math.hypot(b.x - p.x, b.y - p.y) < PR + BR + 8) {
+      b.vx = p.ldx * 460; b.vy = p.ldy * 460; p.lball = true; g.sist = i;
+    }
+    if (!p.lhit && q.stun <= 0 && Math.hypot(q.x - p.x, q.y - p.y) < PR * 2 + 4) {
+      p.lhit = true;
+      const qBall = Math.hypot(q.x - b.x, q.y - b.y) < PR + BR + 30;
+      if (p.lball) { q.stun = 0.7; kortMelding('Ren takling av ' + NAVN[i], 1.2); }
+      else if (qBall) {
+        if (iBoks(q.x, q.y, i)) { startFast('straffe', 1 - i, i === 0 ? STRAFFE : W - STRAFFE, H / 2); return; }
+        p.stun = 1.1; p.lunge = 0;
+        kortMelding('Takling på mann – ' + NAVN[i] + ' blir liggende', 1.5);
+      } else q.stun = 0.4;
     }
   });
+  if (g.tilstand !== 'spill' && g.tilstand !== 'mal' && g.tilstand !== 'klar' && g.tilstand !== 'slutt') return;
+
   // Spiller mot spiller
-  {
+  if (spill) {
     const [p, q] = g.pl, dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy);
     if (d < PR * 2 && d > 0) { const o = (PR * 2 - d) / 2, nx = dx / d, ny = dy / d; p.x -= nx * o; p.y -= ny * o; q.x += nx * o; q.y += ny * o; }
   }
 
   // Ball
   b.x += b.vx * dt; b.y += b.vy * dt;
-  const fr = Math.pow(0.42, dt); b.vx *= fr; b.vy *= fr;
+  if (b.z > 0 || b.vz > 0) {
+    b.vz -= G * dt; b.z += b.vz * dt;
+    if (b.z <= 0) { b.z = 0; b.vz = b.vz < -80 ? -b.vz * 0.42 : 0; }
+  }
+  const fr = b.z > 0 ? Math.pow(0.85, dt) : Math.pow(0.42, dt);
+  b.vx *= fr; b.vy *= fr;
 
-  g.pl.forEach(p => {
+  if (spill && b.z < HODE) g.pl.forEach((p, i) => {
     const dx = b.x - p.x, dy = b.y - p.y, d = Math.hypot(dx, dy), min = PR + BR;
     if (d < min && d > 0) {
       const nx = dx / d, ny = dy / d;
       b.x = p.x + nx * min; b.y = p.y + ny * min;
       const rel = (b.vx - p.vx) * nx + (b.vy - p.vy) * ny;
       if (rel < 0) { b.vx -= 1.5 * rel * nx; b.vy -= 1.5 * rel * ny; }
+      g.sist = i;
     }
   });
-
-  const iMal = b.y > GT + 2 && b.y < GB - 2;
-  // Topp/bunn
-  if (b.y < BR) { b.y = BR; b.vy = Math.abs(b.vy) * 0.8; }
-  if (b.y > H - BR) { b.y = H - BR; b.vy = -Math.abs(b.vy) * 0.8; }
-  // Kortsider og mål
-  if (b.x < BR && !iMal && b.x > -BR) { b.x = BR; b.vx = Math.abs(b.vx) * 0.8; }
-  if (b.x > W - BR && !iMal && b.x < W + BR) { b.x = W - BR; b.vx = -Math.abs(b.vx) * 0.8; }
-  if (b.x < 0 || b.x > W) { // inne i nettet
-    if (b.y < GT + BR) { b.y = GT + BR; b.vy = Math.abs(b.vy) * 0.5; }
-    if (b.y > GB - BR) { b.y = GB - BR; b.vy = -Math.abs(b.vy) * 0.5; }
-    if (b.x < -GD + BR) { b.x = -GD + BR; b.vx = Math.abs(b.vx) * 0.3; }
-    if (b.x > W + GD - BR) { b.x = W + GD - BR; b.vx = -Math.abs(b.vx) * 0.3; }
-  }
   // Stolper
-  for (const [px, py] of [[0, GT], [0, GB], [W, GT], [W, GB]]) {
+  if (b.z < BAR) for (const [px, py] of [[0, GT], [0, GB], [W, GT], [W, GB]]) {
     const dx = b.x - px, dy = b.y - py, d = Math.hypot(dx, dy), min = BR + 5;
     if (d < min && d > 0) {
       const nx = dx / d, ny = dy / d; b.x = px + nx * min; b.y = py + ny * min;
       const v = b.vx * nx + b.vy * ny; if (v < 0) { b.vx -= 1.7 * v * nx; b.vy -= 1.7 * v * ny; }
     }
   }
-  if (aktiv && (b.x < -BR || b.x > W + BR)) {
-    const lag = b.x < 0 ? 1 : 0;
-    g.score[lag]++; g.tilstand = 'mal'; g.pause = 2.2;
-    melding('MÅL!', (lag === 0 ? 'Gul' : 'Blå') + ' scorer · ' + g.score[0] + '–' + g.score[1]);
-    tavle();
+  // Mål og ut av banen
+  if (spill) {
+    if (b.x < -BR || b.x > W + BR) {
+      const d = b.x < 0 ? 0 : 1;                       // laget som forsvarer denne enden
+      if (b.y > GT && b.y < GB && b.z < BAR) {
+        const lag = 1 - d;
+        g.score[lag]++; g.tilstand = 'mal'; g.pause = 2.2;
+        melding('MÅL!', NAVN[lag] + ' scorer · ' + g.score[0] + '–' + g.score[1]);
+        tavle(); vib(60);
+      } else if (g.sist === d) {
+        startFast('corner', 1 - d, d === 0 ? 8 : W - 8, b.y < H / 2 ? 8 : H - 8);
+      } else {
+        startFast('utspark', d, d === 0 ? 45 : W - 45, H / 2);
+      }
+      return;
+    }
+    if (b.y < -BR || b.y > H + BR) {
+      const lag = g.sist === -1 ? (b.x < W / 2 ? 1 : 0) : 1 - g.sist;
+      startFast('innkast', lag, clamp(b.x, 20, W - 20), b.y < 0 ? 4 : H - 4);
+      return;
+    }
+  }
+  // Ballen i nettet etter mål
+  if (g.tilstand === 'mal' && (b.x < 0 || b.x > W)) {
+    if (b.y < GT + BR) { b.y = GT + BR; b.vy = Math.abs(b.vy) * 0.5; }
+    if (b.y > GB - BR) { b.y = GB - BR; b.vy = -Math.abs(b.vy) * 0.5; }
+    if (b.x < -GD + BR) { b.x = -GD + BR; b.vx = Math.abs(b.vx) * 0.3; }
+    if (b.x > W + GD - BR) { b.x = W + GD - BR; b.vx = -Math.abs(b.vx) * 0.3; }
+    b.z = Math.min(b.z, BAR - 2);
   }
 }
 
@@ -528,59 +800,92 @@ let skala = 1, ox = 0, oy = 0, dpr = 1;
 function tilpass(){
   dpr = Math.min(2, window.devicePixelRatio || 1);
   const r = canvas.getBoundingClientRect();
-  canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+  canvas.width = Math.max(1, Math.round(r.width * dpr)); canvas.height = Math.max(1, Math.round(r.height * dpr));
   skala = Math.min(canvas.width / (W + M * 2), canvas.height / (H + M * 2));
   ox = (canvas.width - W * skala) / 2; oy = (canvas.height - H * skala) / 2 + 14 * dpr;
 }
+const FARGER = [['#f2bd14', '#3a2b00'], ['#2456d6', '#ffffff']];
 function tegn(){
-  const g = game, c = ctx;
+  const g = game, c = ctx, nå = performance.now() / 1000;
   c.setTransform(1, 0, 0, 1, 0, 0);
   c.fillStyle = '#173d22'; c.fillRect(0, 0, canvas.width, canvas.height);
   c.setTransform(skala, 0, 0, skala, ox, oy);
-  // Gress med klippestriper
   for (let i = 0; i < 10; i++) { c.fillStyle = i % 2 ? '#2d8a3c' : '#339645'; c.fillRect(i * W / 10, 0, W / 10, H); }
   c.strokeStyle = 'rgba(255,255,255,.88)'; c.lineWidth = 4;
   c.strokeRect(0, 0, W, H);
-  c.beginPath(); c.moveTo(W/2, 0); c.lineTo(W/2, H); c.stroke();
-  c.beginPath(); c.arc(W/2, H/2, 80, 0, Math.PI * 2); c.stroke();
-  c.fillStyle = '#fff'; c.beginPath(); c.arc(W/2, H/2, 5, 0, Math.PI * 2); c.fill();
-  const sh = 330, sw = 140;
-  c.strokeRect(0, (H - sh) / 2, sw, sh); c.strokeRect(W - sw, (H - sh) / 2, sw, sh);
+  c.beginPath(); c.moveTo(W / 2, 0); c.lineTo(W / 2, H); c.stroke();
+  c.beginPath(); c.arc(W / 2, H / 2, 80, 0, Math.PI * 2); c.stroke();
+  c.strokeRect(0, (H - BOKS_H) / 2, BOKS_D, BOKS_H); c.strokeRect(W - BOKS_D, (H - BOKS_H) / 2, BOKS_D, BOKS_H);
   c.strokeRect(0, GT - 30, 50, GH + 60); c.strokeRect(W - 50, GT - 30, 50, GH + 60);
-  c.beginPath(); c.arc(sw - 40, H/2, 70, -0.9, 0.9); c.stroke();
-  c.beginPath(); c.arc(W - sw + 40, H/2, 70, Math.PI - 0.9, Math.PI + 0.9); c.stroke();
-  // Mål med nett
-  for (const [x0, farge] of [[-GD, '#f2bd14'], [W, '#2456d6']]) {
+  c.beginPath(); c.arc(BOKS_D - 40, H / 2, 70, -0.9, 0.9); c.stroke();
+  c.beginPath(); c.arc(W - BOKS_D + 40, H / 2, 70, Math.PI - 0.9, Math.PI + 0.9); c.stroke();
+  for (const [x, y, r0, a0] of [[0, 0, 0, 0], [W, 0, Math.PI / 2, 0], [W, H, Math.PI, 0], [0, H, Math.PI * 1.5, 0]]) {
+    c.beginPath(); c.arc(x, y, 16, r0, r0 + Math.PI / 2); c.stroke();
+  }
+  c.fillStyle = '#fff';
+  for (const x of [W / 2, STRAFFE, W - STRAFFE]) { c.beginPath(); c.arc(x, H / 2, 5, 0, Math.PI * 2); c.fill(); }
+  for (const [x0, farge] of [[-GD, FARGER[0][0]], [W, FARGER[1][0]]]) {
     c.fillStyle = 'rgba(255,255,255,.12)'; c.fillRect(x0, GT, GD, GH);
     c.strokeStyle = 'rgba(255,255,255,.35)'; c.lineWidth = 1.5;
     for (let x = x0; x <= x0 + GD; x += 9) { c.beginPath(); c.moveTo(x, GT); c.lineTo(x, GB); c.stroke(); }
     for (let y = GT; y <= GB; y += 9) { c.beginPath(); c.moveTo(x0, y); c.lineTo(x0 + GD, y); c.stroke(); }
     c.strokeStyle = farge; c.lineWidth = 6; c.strokeRect(x0, GT, GD, GH);
   }
+  // Siktepil ved dødball
+  if (g.fast) {
+    const f = g.fast, ex = f.bx + f.ax * 110, ey = f.by + f.ay * 110;
+    c.strokeStyle = 'rgba(255,255,255,.95)'; c.lineWidth = 4; c.setLineDash([12, 9]);
+    c.beginPath(); c.moveTo(f.bx, f.by); c.lineTo(ex, ey); c.stroke(); c.setLineDash([]);
+    c.fillStyle = '#fff'; c.beginPath();
+    c.moveTo(ex + f.ax * 14, ey + f.ay * 14); c.lineTo(ex - f.ay * 10, ey + f.ax * 10); c.lineTo(ex + f.ay * 10, ey - f.ax * 10); c.closePath(); c.fill();
+  }
   // Spillere
-  const farger = [['#f2bd14', '#3a2b00'], ['#2456d6', '#ffffff']];
   g.pl.forEach((p, i) => {
+    const [kropp, kant] = FARGER[i];
+    if (p.lunge > 0) {
+      c.fillStyle = kropp; c.globalAlpha = 0.3;
+      for (let k = 1; k <= 3; k++) { c.beginPath(); c.arc(p.x - p.ldx * k * 14, p.y - p.ldy * k * 14, PR - k * 3, 0, Math.PI * 2); c.fill(); }
+      c.globalAlpha = 1;
+    }
     c.fillStyle = 'rgba(0,0,0,.25)'; c.beginPath(); c.ellipse(p.x + 4, p.y + 6, PR, PR * 0.85, 0, 0, Math.PI * 2); c.fill();
     if (p.fx > 0) { c.strokeStyle = 'rgba(255,255,255,' + (p.fx / 0.18) + ')'; c.lineWidth = 4; c.beginPath(); c.arc(p.x, p.y, PR + 10 + (0.18 - p.fx) * 60, 0, Math.PI * 2); c.stroke(); }
-    c.fillStyle = farger[i][0]; c.beginPath(); c.arc(p.x, p.y, PR, 0, Math.PI * 2); c.fill();
-    c.strokeStyle = farger[i][1]; c.lineWidth = 3; c.stroke();
-    c.fillStyle = farger[i][1]; c.beginPath(); c.arc(p.x + p.dx * (PR - 8), p.y + p.dy * (PR - 8), 5, 0, Math.PI * 2); c.fill();
+    c.globalAlpha = p.stun > 0 ? 0.55 : 1;
+    c.fillStyle = kropp; c.beginPath(); c.arc(p.x, p.y, PR, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = kant; c.lineWidth = 3; c.stroke();
+    c.fillStyle = kant; c.beginPath(); c.arc(p.x + p.dx * (PR - 8), p.y + p.dy * (PR - 8), 5, 0, Math.PI * 2); c.fill();
+    c.globalAlpha = 1;
+    if (p.stun > 0) {
+      c.fillStyle = '#ffe14d';
+      for (let k = 0; k < 3; k++) { const a = nå * 5 + k * 2.1; c.beginPath(); c.arc(p.x + Math.cos(a) * 18, p.y - PR - 6 + Math.sin(a) * 6, 4, 0, Math.PI * 2); c.fill(); }
+    }
+    if (p.c > 0) {
+      const bx = p.x - 30, by = p.y - PR - 20;
+      c.fillStyle = 'rgba(0,0,0,.55)'; c.fillRect(bx, by, 60, 9);
+      c.fillStyle = 'hsl(' + (120 - 120 * p.c) + ',90%,55%)'; c.fillRect(bx + 1, by + 1, 58 * p.c, 7);
+    }
   });
-  // Ball
-  const b = g.ball;
-  c.fillStyle = 'rgba(0,0,0,.3)'; c.beginPath(); c.ellipse(b.x + 3, b.y + 5, BR, BR * 0.8, 0, 0, Math.PI * 2); c.fill();
-  c.fillStyle = '#fff'; c.beginPath(); c.arc(b.x, b.y, BR, 0, Math.PI * 2); c.fill();
+  // Ball med skygge og høyde
+  const b = g.ball, z = b.z || 0;
+  c.fillStyle = 'rgba(0,0,0,' + (0.3 - Math.min(0.18, z / 600)) + ')';
+  c.beginPath(); c.ellipse(b.x + 3, b.y + 4, BR * (1 - Math.min(0.4, z / 300)), BR * 0.8 * (1 - Math.min(0.4, z / 300)), 0, 0, Math.PI * 2); c.fill();
+  const by = b.y - z * 0.7, br = BR * (1 + z / 220);
+  c.fillStyle = '#fff'; c.beginPath(); c.arc(b.x, by, br, 0, Math.PI * 2); c.fill();
   c.strokeStyle = '#1a1a1a'; c.lineWidth = 1.5; c.stroke();
-  c.fillStyle = '#1a1a1a'; c.beginPath(); c.arc(b.x, b.y, 4, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#1a1a1a'; c.beginPath(); c.arc(b.x, by, br * 0.33, 0, Math.PI * 2); c.fill();
 }
+
+let sistStatus = '';
 function loop(t){
   const dt = Math.min(0.033, (t - sist) / 1000 || 0.016); sist = t;
   if (modus === 'gjest' || modus === 'stopp') { if (modus === 'gjest') tegn(); requestAnimationFrame(loop); return; }
-  lesFjern();
-  // Fast tidssteg for jevn fysikk
+  const inn = samleInput();
+  const st = (fjernKilder(0).length ? 1 : 0) + '' + (fjernKilder(1).length ? 1 : 0);
+  if (st !== sistStatus) { sistStatus = st; $('#p-gul').classList.toggle('on', st[0] === '1'); $('#p-bla').classList.toggle('on', st[1] === '1'); }
   const n = Math.ceil(dt / 0.008);
-  for (let i = 0; i < n; i++) steg(dt / n);
-  for (const l of LAG) if (fjern[l]) fjern[l].spark = false;
+  for (let i = 0; i < n; i++) {
+    steg(dt / n, inn);
+    inn.forEach(s => { s.kick = null; s.tackle = false; });   // hendelser brukes bare én gang
+  }
   if (modus === 'vert' && t - sisteSnap > 33) {
     sisteSnap = t;
     const msg = { role: 'bane', score: game.score, tilstand: game.tilstand, snap: lagSnap() };
@@ -590,49 +895,19 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 
-/* ---------- berøringsstyring på banen (to mobiler) ---------- */
-(function(){
-  const sone = $('.t-stikk'), base = $('.touch .stikk-base'), knott = $('.touch .stikk-knott'), spark = $('.t-spark');
-  let id = null, sx = 0, sy = 0; const R = 60;
-  const flytt = () => { if (modus === 'gjest') sendGjest(); };
-  sone.addEventListener('pointerdown', e => {
-    if (id !== null) return;
-    id = e.pointerId; sone.setPointerCapture(id);
-    const r = sone.getBoundingClientRect(); sx = e.clientX - r.left; sy = e.clientY - r.top;
-    base.style.left = knott.style.left = sx + 'px'; base.style.top = knott.style.top = sy + 'px';
-    base.style.display = knott.style.display = 'block'; e.preventDefault();
-  });
-  sone.addEventListener('pointermove', e => {
-    if (e.pointerId !== id) return;
-    const r = sone.getBoundingClientRect();
-    let dx = e.clientX - r.left - sx, dy = e.clientY - r.top - sy;
-    const d = Math.hypot(dx, dy); if (d > R) { dx *= R / d; dy *= R / d; }
-    knott.style.left = (sx + dx) + 'px'; knott.style.top = (sy + dy) + 'px';
-    lokalStikk.x = dx / R; lokalStikk.y = dy / R; flytt();
-  });
-  const slipp = e => { if (e.pointerId !== id) return; id = null; lokalStikk.x = lokalStikk.y = 0; flytt(); base.style.display = knott.style.display = 'none'; };
-  sone.addEventListener('pointerup', slipp); sone.addEventListener('pointercancel', slipp);
-  spark.addEventListener('pointerdown', e => {
-    e.preventDefault(); spark.classList.add('ned');
-    if (modus === 'gjest') { gjestK++; sendGjest(); } else lokaleSpark[0] = true;
-    if (navigator.vibrate) navigator.vibrate(25);
-  });
-  const opp = () => spark.classList.remove('ned');
-  spark.addEventListener('pointerup', opp); spark.addEventListener('pointercancel', opp); spark.addEventListener('pointerleave', opp);
-  // Gjesten sender styringen jevnlig i tilfelle en melding faller bort
-  setInterval(() => { if (modus === 'gjest') sendGjest(); }, 250);
-})();
+/* ---------- berøringsstyring på banen ---------- */
+const touchKtl = lagKontroller($('#touch'), () => { if (modus === 'gjest') sendGjest(); });
+setInterval(() => { if (modus === 'gjest') sendGjest(); }, 250);
 
 /* ---------- fullskjerm ---------- */
 function fullskjerm(){
   const el = document.documentElement;
-  const aktiv = document.fullscreenElement || document.webkitFullscreenElement;
-  if (aktiv) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+  if (document.fullscreenElement || document.webkitFullscreenElement) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
   const be = el.requestFullscreen || el.webkitRequestFullscreen;
   if (!be) { $('#tips').classList.add('on'); return; }
   try {
     const p = be.call(el, { navigationUI: 'hide' });
-    const lås = () => { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(()=>{}); } catch (e) {} };
+    const lås = () => { try { screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => {}); } catch (e) {} };
     if (p && p.then) p.then(lås).catch(() => $('#tips').classList.add('on')); else lås();
   } catch (e) { $('#tips').classList.add('on'); }
 }
@@ -646,7 +921,6 @@ const fsEndret = () => {
 };
 document.addEventListener('fullscreenchange', fsEndret);
 document.addEventListener('webkitfullscreenchange', fsEndret);
-// Skjul fullskjermknappen når spillet allerede kjører som Hjem-skjerm-app
 if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) $('#fullskjerm').style.display = 'none';
 
 /* ---------- lobby for to mobiler ---------- */
@@ -663,15 +937,16 @@ if (navigator.standalone || matchMedia('(display-mode: standalone)').matches) $(
   inn.addEventListener('keydown', e => { if (e.key === 'Enter') bli(); });
 })();
 
-/* ================= KONTROLLER ================= */
+/* ================= KONTROLLER (TV-modus) ================= */
 const pads = {};
-let padPeer = null, padConn = null, padBane = null, padRolle = null, padKode = null, wake = null;
-const padInn = { x: 0, y: 0, k: 0 };
+let padPeer = null, padConn = null, padBane = null, padRolle = null, padKode = null;
+const padKtl = {};
 
 function send(){
-  if (!padConn || !padConn.open) return;
-  try { padConn.send({ role: padRolle, x: +padInn.x.toFixed(2), y: +padInn.y.toFixed(2), k: padInn.k }); } catch (e) {}
+  if (!padConn || !padConn.open || !padKtl[padRolle]) return;
+  try { padConn.send(pakk(padRolle, padKtl[padRolle])); } catch (e) {}
 }
+setInterval(send, 250);
 
 function startPad(rolle){
   padRolle = rolle;
@@ -685,6 +960,7 @@ function byggPad(el, rolle){
   el.appendChild($('#pad-mal').content.cloneNode(true));
   $('.lagnavn', el).textContent = rolle === 'gul' ? 'Gul spiller' : 'Blå spiller';
   const inn = $('.kode-inn', el), feil = $('.feil', el), boks = $('.kode-boks', el), pad = $('.pad', el), status = $('.status', el), score = $('.score', el);
+  padKtl[rolle] = lagKontroller(pad, () => { if (padRolle === rolle) send(); });
   try { const k = localStorage.getItem('sofafotball-kode'); if (k) inn.value = k; } catch (e) {}
   if (urlKode) inn.value = urlKode;
 
@@ -703,7 +979,7 @@ function byggPad(el, rolle){
       }
       const conn = padPeer.connect(PEER_ID(kode), { serialization: 'json' });
       await new Promise((ok, nei) => {
-        const t = setTimeout(() => nei({ type: 'timeout' }), 10000);
+        const t = setTimeout(() => nei({ type: 'tidsavbrudd' }), 10000);
         conn.once('open', () => { clearTimeout(t); ok(); });
         padPeer.once('error', e => { clearTimeout(t); nei(e); });
       });
@@ -711,52 +987,19 @@ function byggPad(el, rolle){
       conn.on('data', d => { if (d && d.role === 'bane') { padBane = d; alle(); } });
       conn.on('close', () => { if (padConn === conn) { padConn = null; padBane = null; feil.textContent = 'Mistet kontakten med banen.'; alle(); } });
     } catch (e) {
-      feil.textContent = e && e.type === 'peer-unavailable' ? 'Fant ingen bane med koden ' + kode + '. Sjekk at banen er åpen og viser samme kode.' : 'Fikk ikke koblet til (' + ((e && e.type) || 'ukjent feil') + '). Prøv igjen, eller bruk samme wifi på begge.';
+      feil.textContent = e && e.type === 'peer-unavailable'
+        ? 'Fant ingen bane med koden ' + kode + '. Sjekk at banen er åpen og viser samme kode.'
+        : 'Fikk ikke koblet til (' + ((e && e.type) || 'ukjent feil') + '). Prøv igjen, eller bruk samme wifi på begge.';
       return;
     }
     try { localStorage.setItem('sofafotball-kode', kode); } catch (e) {}
     feil.textContent = '';
     send();
     try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) {}
-    Object.values(pads).forEach(p => p.oppdater());
+    alle();
   }
   $('.bli-med', el).addEventListener('click', blimed);
   inn.addEventListener('keydown', e => { if (e.key === 'Enter') blimed(); });
-
-  // Styrespak
-  const sone = $('.stikk-sone', el), base = $('.stikk-base', el), knott = $('.stikk-knott', el), hint = $('.stikk-hint', el);
-  let id = null, sx = 0, sy = 0; const R = 65;
-  sone.addEventListener('pointerdown', e => {
-    if (id !== null) return;
-    id = e.pointerId; sone.setPointerCapture(id);
-    const r = sone.getBoundingClientRect(); sx = e.clientX - r.left; sy = e.clientY - r.top;
-    base.style.left = knott.style.left = sx + 'px'; base.style.top = knott.style.top = sy + 'px';
-    base.style.display = knott.style.display = 'block'; hint.style.display = 'none';
-    e.preventDefault();
-  });
-  sone.addEventListener('pointermove', e => {
-    if (e.pointerId !== id) return;
-    const r = sone.getBoundingClientRect();
-    let dx = e.clientX - r.left - sx, dy = e.clientY - r.top - sy;
-    const d = Math.hypot(dx, dy); if (d > R) { dx *= R / d; dy *= R / d; }
-    knott.style.left = (sx + dx) + 'px'; knott.style.top = (sy + dy) + 'px';
-    padInn.x = dx / R; padInn.y = dy / R; send();
-  });
-  const slipp = e => {
-    if (e.pointerId !== id) return;
-    id = null; padInn.x = padInn.y = 0; send();
-    base.style.display = knott.style.display = 'none';
-  };
-  sone.addEventListener('pointerup', slipp); sone.addEventListener('pointercancel', slipp);
-
-  const spark = $('.spark', el);
-  spark.addEventListener('pointerdown', e => {
-    e.preventDefault(); spark.classList.add('ned');
-    padInn.k++; send();
-    if (navigator.vibrate) navigator.vibrate(25);
-  });
-  const opp = () => spark.classList.remove('ned');
-  spark.addEventListener('pointerup', opp); spark.addEventListener('pointercancel', opp); spark.addEventListener('pointerleave', opp);
 
   return {
     oppdater(){
@@ -764,23 +1007,21 @@ function byggPad(el, rolle){
       boks.style.display = med ? 'none' : 'flex';
       pad.classList.toggle('on', med);
       if (!med) return;
-      const bane = padBane ? { presence: padBane } : null;
-      if (bane) {
-        const s = Array.isArray(bane.presence.score) ? bane.presence.score : [0, 0];
+      if (padBane) {
+        const s = Array.isArray(padBane.score) ? padBane.score : [0, 0];
         score.textContent = (+s[0] || 0) + ' – ' + (+s[1] || 0);
-        const t = bane.presence.tilstand;
+        const t = padBane.tilstand;
         status.textContent = 'Kode ' + padKode + ' · ' + (t === 'klar' || t === 'slutt' ? 'Trykk SPARK for å starte' : 'Tilkoblet');
-      } else {
-        status.textContent = 'Kode ' + padKode + ' · venter på banen …';
-      }
+      } else status.textContent = 'Kode ' + padKode + ' · venter på banen …';
     }
   };
 }
 document.addEventListener('visibilitychange', async () => {
-  if (document.visibilityState === 'visible' && padConn && navigator.wakeLock) { try { wake = await navigator.wakeLock.request('screen'); } catch (e) {} }
+  if (document.visibilityState === 'visible' && (padConn || (baneStartet && modus !== 'tv' && modus !== 'stopp')) && navigator.wakeLock) {
+    try { wake = await navigator.wakeLock.request('screen'); } catch (e) {}
+  }
 });
 
-if (urlKode && !location.hash) location.hash = 'meny';
 vis();
 })();
 </script>
